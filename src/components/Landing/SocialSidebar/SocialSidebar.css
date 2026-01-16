@@ -1,0 +1,284 @@
+/* Main social sidebar section with testimonials and slideshow */
+
+.social-sidebar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 6rem 2rem;
+  background: none;
+}
+
+.social-sidebar__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 4rem;
+  max-width: 1200px;
+  width: 100%;
+  align-items: center;
+}
+
+.social-sidebar__card {
+  background-color: #fff;
+  border-radius: 32px;
+  padding: 64px 48px;
+  max-width: 600px;
+  min-width: 340px;
+  width: 100%;
+  min-height: 380px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+}
+
+.social-sidebar__headline {
+  font-family: "Playfair Display", serif;
+  font-size: 1.8rem;
+  color: #b97c8b;
+  font-weight: 700;
+  text-align: center;
+}
+
+.social-sidebar__testimonials-viewport {
+  width: 100%;
+  height: 120px;
+  overflow: hidden;
+  position: relative;
+}
+
+.social-sidebar__testimonials-track {
+  display: flex;
+  height: 100%;
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+.social-sidebar__testimonial {
+  min-width: 100%;
+  flex-shrink: 0;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 120px;
+  padding: 0 24px;
+}
+
+.social-sidebar__quote {
+  font-style: italic;
+  font-size: 1.25rem;
+  color: #7a6e63;
+  font-family: "Playfair Display", serif;
+  font-weight: 500;
+  opacity: 0.92;
+  margin-bottom: 0.5em;
+}
+
+.social-sidebar__author {
+  display: block;
+  margin-top: 8px;
+  font-weight: 600;
+  color: #b97c8b;
+  font-family: "Inter", "Segoe UI", Arial, sans-serif;
+  font-size: 1.05rem;
+  letter-spacing: 0.01em;
+}
+
+.social-sidebar__testimonials-nav {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.social-sidebar__testimonials-nav-btn {
+  background: #f3e6e1;
+  color: #b97c8b;
+  border: none;
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px 0 rgba(180, 160, 140, 0.08);
+  transition: background 0.3s, color 0.3s;
+}
+
+.social-sidebar__testimonials-nav-btn:hover {
+  background: #e7d6d0;
+  color: #a05e6a;
+}
+
+.social-sidebar__cta {
+  margin: 2rem auto 0 auto;
+  background: linear-gradient(90deg, #e7d6d0 0%, #f3e6e1 100%);
+  color: #b97c8b;
+  font-family: "Playfair Display", serif;
+  font-size: 1.08rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 999px;
+  padding: 0.7em 2.5em;
+  box-shadow: 0 2px 12px 0 rgba(239, 222, 213, 0.08);
+  cursor: pointer;
+  transition: background 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  display: block;
+}
+
+.social-sidebar__cta:hover {
+  background: linear-gradient(90deg, #f3e6e1 0%, #e7d6d0 100%);
+  color: #a05e6a;
+}
+
+.social-sidebar__slideshow {
+  position: relative;
+  height: 520px;
+  border-radius: 24px;
+  overflow: hidden;
+  background: #f9f7f4;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+}
+
+.social-sidebar__slide-wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+.social-sidebar__slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.social-sidebar__slide.active {
+  opacity: 1;
+  z-index: 2;
+}
+
+.social-sidebar__media {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 24px;
+  box-shadow: none;
+}
+
+.social-sidebar__story-progress {
+  display: flex;
+  gap: 0.35rem;
+  position: absolute;
+  top: 1.1rem;
+  left: 1.2rem;
+  right: 1.2rem;
+  z-index: 10;
+  height: 5px;
+  width: auto;
+}
+.social-sidebar__story-bar {
+  flex: 1 1 0;
+  background: #f3e6e1;
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+  height: 100%;
+  opacity: 0.5;
+  transition: opacity 0.3s;
+}
+.social-sidebar__story-bar--active {
+  opacity: 1;
+  background: #e7d6d0;
+}
+.social-sidebar__story-bar-fill {
+  background: #b97c8b;
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s linear;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.social-sidebar__nav {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  pointer-events: none;
+  z-index: 12;
+  height: 0;
+}
+.social-sidebar__nav-button {
+  pointer-events: auto;
+  background: rgba(249, 247, 244, 0.7);
+  border: none;
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #b97c8b;
+  font-size: 1.3rem;
+  opacity: 0;
+  transition: opacity 0.3s, background 0.3s;
+  box-shadow: 0 2px 8px 0 rgba(180, 160, 140, 0.08);
+  margin: 0 0.2rem;
+  cursor: pointer;
+}
+.social-sidebar__slideshow:hover .social-sidebar__nav-button {
+  opacity: 1;
+}
+.social-sidebar__nav-button:active {
+  background: #f3e6e1;
+}
+.social-sidebar__nav-button--prev {
+  left: 0.2rem;
+}
+.social-sidebar__nav-button--next {
+  right: 0.2rem;
+}
+@media (max-width: 900px) {
+  .social-sidebar__nav-button {
+    opacity: 0.7;
+  }
+  .social-sidebar__slideshow:hover .social-sidebar__nav-button {
+    opacity: 0.7;
+  }
+}
+@media (max-width: 768px) {
+  .social-sidebar {
+    padding: 3rem 0.5rem;
+  }
+  .social-sidebar__grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .social-sidebar__slideshow {
+    height: 380px;
+  }
+}

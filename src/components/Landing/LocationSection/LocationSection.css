@@ -1,0 +1,117 @@
+.location-section {
+  background: #f9f7f4;
+  padding: 5rem 2rem 4rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.location-section__container {
+  display: flex;
+  gap: 4rem;
+  max-width: 1200px;
+  width: 100%;
+  justify-content: center;
+  align-items: flex-start;
+}
+.location-section__col {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.location-section__col--image {
+  align-items: center;
+  justify-content: center;
+}
+.location-section__image {
+  width: 100%;
+  max-width: 420px;
+  border-radius: 32px;
+  box-shadow: 0 10px 40px rgba(185, 124, 139, 0.13);
+  object-fit: cover;
+  background: #f3e6e1;
+  margin-bottom: 2rem;
+}
+.location-section__title {
+  font-family: "Playfair Display", serif;
+  font-size: 2rem;
+  color: #b97c8b;
+  font-weight: 700;
+  margin-bottom: 1.2rem;
+  letter-spacing: 0.01em;
+}
+.location-section__desc {
+  font-size: 1.18rem;
+  color: #7a6e63;
+  font-family: "Inter", "Segoe UI", Arial, sans-serif;
+  opacity: 0.92;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+.location-section__address-group {
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+.location-section__address-label,
+.location-section__city-label {
+  font-weight: 600;
+  color: #b97c8b;
+  font-family: "Inter", "Segoe UI", Arial, sans-serif;
+  margin-right: 0.5em;
+}
+.location-section__address-value,
+.location-section__city-value {
+  color: #7a6e63;
+  font-family: "Inter", "Segoe UI", Arial, sans-serif;
+}
+/* Mapa minimalista, elegante y secundario */
+.location-section__map-wrap {
+  width: 100%;
+  border-radius: 32px;
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(185, 124, 139, 0.07);
+  background: #fcf9f6;
+  margin-top: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.location-section__map {
+  width: 100%;
+  height: 220px;
+  border: 0;
+  display: block;
+  border-radius: 32px;
+  background: #fcf9f6;
+  filter: grayscale(40%) contrast(90%) brightness(1.05);
+  transition: filter 0.3s;
+}
+@media (max-width: 900px) {
+  .location-section__map-wrap {
+    border-radius: 24px;
+  }
+  .location-section__map {
+    height: 140px;
+    border-radius: 24px;
+  }
+}
+
+@media (max-width: 900px) {
+  .location-section__container {
+    flex-direction: column;
+    gap: 2.5rem;
+    align-items: stretch;
+  }
+  .location-section__col--image {
+    margin-bottom: 0;
+  }
+  .location-section__image {
+    max-width: 100%;
+    margin-bottom: 1.5rem;
+  }
+  .location-section__map {
+    height: 200px;
+  }
+}

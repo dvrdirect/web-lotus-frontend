@@ -1,0 +1,161 @@
+.discounts-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* Compensa la altura del navbar fijo cuando se hace scroll a #promociones */
+  scroll-margin-top: 96px;
+}
+.discounts-section__headline {
+  font-family: "Playfair Display", serif;
+  font-size: 2rem;
+  color: #b97c8b;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+.discounts-section__slideshow {
+  width: 100%;
+  max-width: 700px;
+  min-height: 260px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+.discounts-section__slide {
+  background: #fff;
+  border-radius: 32px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  padding: 2.5rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 32px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  min-width: 340px;
+  max-width: 600px;
+  width: 100%;
+  height: 220px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.3s, transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    background 0.35s, color 0.35s;
+  will-change: transform, background, color;
+  background-repeat: no-repeat;
+}
+.discounts-section__details {
+  margin-top: 1.5rem;
+  text-align: center;
+}
+.discounts-section__title {
+  font-family: "Playfair Display", serif;
+  font-size: 1.22rem;
+  color: #b97c8b;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.01em;
+}
+.discounts-section__desc {
+  font-size: 1.09rem;
+  color: #7a6e63;
+  font-family: "Inter", "Segoe UI", Arial, sans-serif;
+  opacity: 0.92;
+  margin-top: 0.2em;
+  line-height: 1.5;
+}
+.discounts-section__img {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 2px 12px 0 rgba(185, 124, 139, 0.08);
+  background: linear-gradient(135deg, #f3e6e1 60%, #fff 100%);
+}
+.discounts-section__info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.discounts-section__title {
+  font-family: "Playfair Display", serif;
+  font-size: 1.22rem;
+  color: #b97c8b;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.01em;
+}
+.discounts-section__desc {
+  font-size: 1.09rem;
+  color: #7a6e63;
+  font-family: "Inter", "Segoe UI", Arial, sans-serif;
+  opacity: 0.92;
+  margin-top: 0.2em;
+  line-height: 1.5;
+}
+.discount-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(185, 124, 139, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+.discount-modal__content {
+  background: #fff;
+  border-radius: 32px;
+  box-shadow: 0 20px 60px rgba(185, 124, 139, 0.16);
+  padding: 2.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 400px;
+  width: 100%;
+}
+.discount-modal__img {
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 12px 0 rgba(185, 124, 139, 0.12);
+}
+.discount-modal__title {
+  font-family: "Playfair Display", serif;
+  font-size: 1.35rem;
+  color: #b97c8b;
+  font-weight: 700;
+  margin-bottom: 0.7rem;
+  text-align: center;
+}
+.discount-modal__desc {
+  font-size: 1.12rem;
+  color: #7a6e63;
+  font-family: "Inter", "Segoe UI", Arial, sans-serif;
+  opacity: 0.95;
+  margin-bottom: 1.2rem;
+  text-align: center;
+}
+.discount-modal__cta {
+  background: linear-gradient(90deg, #e7d6d0 0%, #f3e6e1 100%);
+  color: #b97c8b;
+  font-family: "Playfair Display", serif;
+  font-size: 1.08rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 999px;
+  padding: 0.7em 2.5em;
+  box-shadow: 0 2px 12px 0 rgba(239, 222, 213, 0.08);
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.4s, color 0.4s;
+  display: inline-block;
+}
+.discount-modal__cta:hover {
+  background: linear-gradient(90deg, #f3e6e1 0%, #e7d6d0 100%);
+  color: #a05e6a;
+}

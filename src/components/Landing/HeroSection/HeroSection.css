@@ -1,0 +1,218 @@
+.hero-section {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(180deg, #f9f7f4 0%, #f7f3ef 100%);
+  padding: 0 2rem;
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Fondo con imagen semitransparente */
+.hero-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* Imagen de fondo semitransparente de cabina */
+  background-image: url("/src/images/backgrounds/image_1.png");
+  background-size: cover;
+  background-position: center;
+  opacity: 0.22; /* efecto calmado y discreto */
+  z-index: 0;
+  backdrop-filter: blur(10px); /* Legibilidad elite */
+}
+
+.hero-section__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.5rem;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1; /* sobre la imagen de fondo */
+}
+
+/* Bloque de texto centrado con overlay suave para legibilidad */
+.hero-section__text-block {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 1.25rem 1.5rem;
+  /* Gradiente igual al botón, pero con transparencia */
+  background: linear-gradient(
+    90deg,
+    rgba(247, 230, 230, 0.72) 0%,
+    rgba(249, 233, 226, 0.72) 100%
+  );
+  backdrop-filter: blur(4px);
+  border-radius: 24px;
+}
+
+.hero-section__logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding: 2.5rem 0 1.5rem 0;
+  position: relative;
+  transition: padding 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hero-section__logo-image {
+  width: 240px;
+  height: 240px;
+  object-fit: contain;
+  border-radius: 0; /* sin forma circular */
+  background: transparent; /* sin fondo alguno, logo transparente */
+  box-shadow: none;
+  transition: transform 0.3s ease-in-out;
+  will-change: transform;
+  cursor: pointer;
+  transform-origin: center;
+}
+
+/* Hover del logo: interacción suave con zoom */
+.hero-section__logo-image:hover {
+  transform: scale(2);
+}
+
+.hero-section__lottie {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 120px;
+  height: 120px;
+  pointer-events: none;
+  opacity: 0.7;
+  z-index: 2;
+}
+.hero-section__title {
+  font-family: "Playfair Display", serif;
+  transform-origin: center;
+  font-size: 2.8rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+  font-weight: 700;
+  color: #b97c8b;
+  text-shadow: 0px 2px 4px rgba(255, 255, 255, 0.8);
+  letter-spacing: 0.01em;
+}
+
+.hero-section__subtitle {
+  font-family: "Inter", "Segoe UI", Arial, sans-serif;
+  font-size: 1.18rem;
+  color: #7a6e63;
+  font-weight: 400;
+  text-align: center;
+  margin-bottom: 3.5rem;
+  line-height: 1.5;
+  text-shadow: 0px 2px 4px rgba(255, 255, 255, 0.8);
+  opacity: 0.92;
+}
+
+.hero-section__cta-button {
+  font-family: "Playfair Display", serif;
+  font-size: 1.15rem;
+  background: linear-gradient(90deg, #f7e6e6 0%, #f9e9e2 100%);
+  color: #b97c8b;
+  border: none;
+  border-radius: 2rem;
+  padding: 0.85em 2.5em;
+  cursor: pointer;
+  transition: background 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: none;
+  outline: none;
+  margin-top: 0.5rem;
+  letter-spacing: 0.01em;
+  will-change: background, color, transform;
+}
+.hero-section__cta-button:hover,
+.hero-section__cta-button:focus {
+  background: linear-gradient(90deg, #f9e9e2 0%, #f7e6e6 100%);
+  color: #a05e6a;
+  transform: scale(1.045);
+}
+
+.hero-section__scroll-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2.5rem;
+  opacity: 0.7;
+  animation: hero-scroll-down 2.5s infinite cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hero-section__scroll-text {
+  font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
+  font-size: 1rem;
+  color: #bfaea2;
+  margin-bottom: 0.2em;
+  letter-spacing: 0.04em;
+}
+
+.hero-section__scroll-icon {
+  width: 28px;
+  height: 28px;
+  stroke: #bfaea2;
+  stroke-width: 2.5;
+  transition: stroke 0.3s;
+}
+
+@keyframes hero-scroll-down {
+  0% {
+    transform: translateY(0);
+    opacity: 0.7;
+  }
+  60% {
+    transform: translateY(16px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 0.7;
+  }
+}
+
+@media (max-width: 700px) {
+  .hero-section__content {
+    max-width: 95vw;
+    gap: 1.5rem;
+  }
+  .hero-section__text-block {
+    padding: 1rem 1.25rem;
+    border-radius: 20px;
+    background: linear-gradient(
+      90deg,
+      rgba(247, 230, 230, 0.62) 0%,
+      rgba(249, 233, 226, 0.62) 100%
+    );
+  }
+  .hero-section__logo-image {
+    width: 140px;
+    height: 140px;
+  }
+  .hero-section__title {
+    font-size: 2rem;
+  }
+  .hero-section__subtitle {
+    font-size: 1.05rem;
+  }
+  .hero-section__cta-button {
+    font-size: 1rem;
+    padding: 0.7em 1.5em;
+  }
+  .hero-section__scroll-indicator {
+    margin-top: 1.2rem;
+  }
+}
+.hero-section {
+  /* BEM bloque principal */
+}

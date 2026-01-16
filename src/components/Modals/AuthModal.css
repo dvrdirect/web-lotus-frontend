@@ -1,0 +1,268 @@
+.auth-modal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  font-family: "Inter", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+}
+
+.auth-modal__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 12, 10, 0.22);
+  backdrop-filter: blur(5px);
+}
+
+.auth-modal__panel {
+  position: relative;
+  z-index: 1;
+  max-width: 480px;
+  width: 90%;
+  background: #fdfcfb; /* blanco roto/crema */
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  padding: 3rem 3rem 2.75rem 3rem;
+  box-sizing: border-box;
+  animation: auth-modal-fade-in 0.35s ease-out;
+}
+
+.auth-modal__close {
+  position: absolute;
+  top: 1.1rem;
+  right: 1.25rem;
+  background: transparent;
+  border: none;
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  color: #a08f84;
+  transition: color 0.25s ease, transform 0.25s ease;
+}
+
+.auth-modal__close:hover {
+  color: #b97c8b;
+  transform: scale(1.05);
+}
+
+.auth-modal__header {
+  margin-bottom: 1.75rem;
+}
+
+.auth-modal__title {
+  font-family: "Playfair Display", serif;
+  font-size: 2.1rem;
+  color: #b97c8b;
+  margin: 0 0 0.35rem 0;
+}
+
+.auth-modal__subtitle {
+  margin: 0;
+  font-size: 0.98rem;
+  color: #9a8a7c; /* gris suave para no competir con el título */
+  opacity: 0.9;
+}
+
+.auth-modal__form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.auth-modal__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.auth-modal__label {
+  font-size: 0.9rem;
+  color: #7a6e63;
+  letter-spacing: 0.06em; /* look más editorial */
+  text-transform: none; /* sentence case */
+}
+
+.auth-modal__input {
+  border: none;
+  border-radius: 8px;
+  border-bottom: 1px solid rgba(185, 124, 139, 0.4);
+  padding: 0.7rem 0.2rem;
+  font-size: 0.98rem;
+  color: #40342f;
+  background: #f9f5f2; /* crema muy sutil */
+  outline: none;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease,
+    background-color 0.25s ease, border-bottom-width 0.25s ease;
+}
+
+.auth-modal__input::placeholder {
+  color: #b7aaa1;
+}
+
+.auth-modal__input:focus {
+  border-bottom-color: rgba(185, 124, 139, 0.9);
+  border-bottom-width: 2px; /* micro-interacción vibrante */
+  box-shadow: 0 8px 18px rgba(185, 124, 139, 0.12);
+  background: #fbf7f4;
+}
+
+.auth-modal__input--error {
+  border-bottom-color: #c76b6b;
+}
+
+.auth-modal__error {
+  font-size: 0.78rem;
+  color: #c76b6b;
+}
+
+.auth-modal__error-message {
+  font-size: 0.78rem;
+  color: #c76b6b;
+  margin-top: 0.15rem;
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.auth-modal__button {
+  margin-top: 0.5rem;
+  border: none;
+  border-radius: 999px;
+  padding: 0.8rem 1.2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  background: linear-gradient(90deg, #e7d6d0 0%, #f3e6e1 100%);
+  color: #4a3832; /* café oscuro para mayor contraste */
+  box-shadow: 0 4px 18px rgba(239, 222, 213, 0.3);
+  transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease,
+    color 0.3s ease;
+  align-self: center;
+  max-width: 260px;
+  width: 100%;
+}
+
+.auth-modal__button:hover {
+  background: linear-gradient(90deg, #e1c9c0 0%, #e9d7cf 100%);
+  box-shadow: 0 6px 24px rgba(239, 222, 213, 0.45);
+  transform: translateY(-1px);
+}
+
+.auth-modal__divider {
+  margin: 1.25rem auto 0.75rem auto;
+  font-size: 0.8rem;
+  color: #b7aaa1;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  position: relative;
+  width: 100%;
+  text-align: center;
+}
+
+.auth-modal__divider::before,
+.auth-modal__divider::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 36%;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(185, 124, 139, 0.4),
+    transparent
+  );
+}
+
+.auth-modal__divider::before {
+  left: 0;
+}
+
+.auth-modal__divider::after {
+  right: 0;
+}
+
+.auth-modal__social {
+  display: flex;
+  justify-content: center;
+  margin-top: 0.25rem;
+}
+
+.auth-modal__footer {
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+  color: #7a6e63;
+  text-align: center;
+}
+
+.auth-modal__form--success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  text-align: center;
+}
+
+.auth-modal__success-lottie {
+  width: 220px;
+  height: 220px;
+}
+
+.auth-modal__link {
+  background: none;
+  border: none;
+  padding: 0;
+  margin-left: 0.2rem;
+  font-size: 0.9rem;
+  color: #b97c8b;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition: color 0.25s ease;
+}
+
+.auth-modal__link:hover {
+  color: #a05e6a;
+}
+
+@keyframes auth-modal-fade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 600px) {
+  .auth-modal__panel {
+    padding: 2.4rem 1.8rem 2.2rem 1.8rem;
+    max-width: 92vw;
+  }
+
+  .auth-modal__title {
+    font-size: 1.6rem;
+  }
+}
+
+/* Ilustración minimalista de loto en el modal de registro */
+.auth-modal__panel--signup::after {
+  content: "";
+  position: absolute;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  width: 120px;
+  height: 120px;
+  background-image: url("../../images/logos/transparent_logo.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  opacity: 0.08;
+  pointer-events: none;
+}

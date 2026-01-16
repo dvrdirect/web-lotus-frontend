@@ -1,0 +1,85 @@
+@import "../ProfilePage/ProfilePage.css";
+
+.settings-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+}
+
+.settings-section__title {
+  font-family: "Playfair Display", "Times New Roman", serif;
+  font-size: 1.05rem;
+  color: #25323d;
+  margin: 0 0 0.35rem;
+}
+
+.settings-section__description {
+  margin: 0 0 0.8rem;
+  font-size: 0.88rem;
+  color: #6b7280;
+}
+
+.settings-section__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  padding: 0.6rem 0;
+}
+
+.settings-section__text {
+  max-width: 70%;
+}
+
+.settings-section__label {
+  display: block;
+  font-size: 0.9rem;
+  color: #374151;
+}
+
+.settings-section__hint {
+  display: block;
+  margin-top: 0.12rem;
+  font-size: 0.8rem;
+  color: #9ca3af;
+}
+
+.settings-switch {
+  width: 42px;
+  height: 22px;
+  border-radius: 999px;
+  border: 1px solid rgba(185, 124, 139, 0.35);
+  background: rgba(248, 246, 243, 0.9);
+  backdrop-filter: blur(10px);
+  padding: 0 3px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.settings-switch__thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  background: #e5d3cb;
+  box-shadow: 0 2px 6px rgba(148, 118, 103, 0.35);
+  transition: transform 0.22s ease, background 0.22s ease;
+}
+
+.settings-switch--on {
+  background: linear-gradient(135deg, #f3e6e1, #e7d6d0);
+  border-color: rgba(185, 124, 139, 0.9);
+}
+
+.settings-switch--on .settings-switch__thumb {
+  transform: translateX(16px);
+  background: #ffffff;
+}
+
+@media (max-width: 640px) {
+  .settings-section__text {
+    max-width: 100%;
+  }
+}

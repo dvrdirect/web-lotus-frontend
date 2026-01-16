@@ -1,0 +1,57 @@
+.pattern-section {
+  position: relative;
+  width: 100%;
+  padding: 4rem 0;
+}
+
+.pattern-section__inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 2.5rem;
+}
+
+/* Sección con imagen de fondo + overlay suave */
+.pattern-section--image {
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.pattern-section__overlay {
+  position: absolute;
+  inset: 0;
+  /* Overlay muy suave: baja opacidad de la imagen para máxima legibilidad */
+  background: linear-gradient(
+      to bottom,
+      rgba(248, 246, 243, 0.96),
+      rgba(248, 246, 243, 0.94)
+    ),
+    rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(3px);
+}
+
+.pattern-section--image .pattern-section__inner {
+  color: #4b5563;
+}
+
+/* Sección blanca limpia para alternar con la anterior */
+.pattern-section--white {
+  background: #ffffff;
+}
+
+.pattern-section--white .pattern-section__inner {
+  color: #4b5563;
+}
+
+@media (max-width: 768px) {
+  .pattern-section {
+    padding: 3rem 0;
+  }
+
+  .pattern-section__inner {
+    padding: 0 1.5rem;
+  }
+}

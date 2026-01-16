@@ -1,0 +1,116 @@
+/* High-end floating social bar (Lotus Spa) */
+
+.social-floating-bar {
+  position: fixed;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  pointer-events: auto;
+}
+
+.social-floating-bar__container {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.4rem;
+  border-radius: 50px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(185, 124, 139, 0.16);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+  margin-right: 1.1rem;
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.social-floating-bar__container--expanded {
+  transform: translateX(-4px);
+}
+
+.social-floating-bar__trigger {
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.social-floating-bar__trigger-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #f3e6e1, #e7d6d0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #b97c8b;
+}
+
+.social-floating-bar__icons {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-left: 0.35rem;
+  max-width: 0;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+  transition: max-width 0.3s ease, opacity 0.25s ease;
+}
+
+.social-floating-bar__container--expanded .social-floating-bar__icons {
+  max-width: 160px;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.social-floating-bar__icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #b97c8b;
+  background: transparent;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.social-floating-bar__icon:hover {
+  transform: scale(1.08) translateY(-1px);
+  box-shadow: 0 6px 18px rgba(185, 124, 139, 0.18);
+  background: #ffffff;
+}
+
+/* Brand colors only on individual hover */
+
+.social-floating-bar__icon--whatsapp:hover {
+  color: #25d366;
+}
+
+.social-floating-bar__icon--facebook:hover {
+  color: #1877f2;
+}
+
+.social-floating-bar__icon--instagram:hover {
+  color: #e1306c;
+}
+
+@media (max-width: 768px) {
+  .social-floating-bar {
+    top: auto;
+    bottom: 1.5rem;
+    right: 1.2rem;
+    transform: none;
+  }
+
+  .social-floating-bar__container {
+    margin-right: 0;
+  }
+}

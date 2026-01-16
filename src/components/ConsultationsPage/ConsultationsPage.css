@@ -1,0 +1,86 @@
+@import "../ProfilePage/ProfilePage.css";
+
+.consultations-list__items {
+  list-style: none;
+  margin: 1.4rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.consultation-card {
+  padding: 0.85rem 1rem;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(185, 124, 139, 0.16);
+  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.06);
+}
+
+.consultation-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.consultation-card__service {
+  margin: 0;
+  font-size: 0.96rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.consultation-card__category {
+  margin: 0.1rem 0 0;
+  font-size: 0.8rem;
+  color: #9ca3af;
+}
+
+.consultation-card__status {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  border-radius: 999px;
+  padding: 0.18rem 0.7rem;
+  border: 1px solid rgba(148, 118, 103, 0.28);
+  background: rgba(250, 244, 237, 0.95);
+  color: #7a3e4f;
+}
+
+.consultation-card__status--finalizada {
+  background: rgba(209, 250, 229, 0.9);
+  border-color: rgba(16, 185, 129, 0.35);
+  color: #047857;
+}
+
+.consultation-card__status--confirmada {
+  background: rgba(239, 246, 255, 0.96);
+  border-color: rgba(59, 130, 246, 0.35);
+  color: #1d4ed8;
+}
+
+.consultation-card__meta {
+  display: flex;
+  gap: 1.25rem;
+  margin-top: 0.7rem;
+}
+
+.consultation-card__meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.82rem;
+  color: #4b5563;
+}
+
+.consultation-card__meta-item svg {
+  color: #b97c8b;
+}
+
+@media (max-width: 640px) {
+  .consultation-card__meta {
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+}

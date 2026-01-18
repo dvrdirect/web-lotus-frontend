@@ -1,11 +1,12 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { loginWithGoogleIdToken } from "../api/authApi";
+import { mainApi } from "../utils/MainApi";
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userData, setUserData] = useState(null);
+  // currentUser: estado global con los datos del usuario autenticado
+  const [currentUser, setCurrentUser] = useState(null);
 
   // Verifica sesión guardada sin bloquear el primer render (Hero se monta igual)
   useEffect(() => {
@@ -15,7 +16,7 @@ export const AuthProvider = ({ children }) => {
         const parsed = JSON.parse(stored);
         if (parsed && parsed.user) {
           setIsLoggedIn(true);
-          setUserData(parsed.user);
+          setCurrentUser(parsed.user);
         }
       }
     } catch (e) {
@@ -24,19 +25,27 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  const login = (user) => {
+  const persistSession = ({ user, token }) => {
     setIsLoggedIn(true);
-    setUserData(user);
+    setCurrentUser(user);
     try {
-      window.localStorage.setItem("lotus_auth", JSON.stringify({ user }));
+      window.localStorage.setItem(
+        "lotus_auth",
+        JSON.stringify({ user, token }),
+      );
     } catch (e) {
       console.error("No se pudo guardar la sesión de Lotus Spa", e);
     }
   };
 
+  const login = (user) => {
+    // login "local" sin backend (por si lo sigues usando en alguna parte)
+    persistSession({ user, token: null });
+  };
+
   const logout = () => {
     setIsLoggedIn(false);
-    setUserData(null);
+    setCurrentUser(null);
     try {
       window.localStorage.removeItem("lotus_auth");
     } catch (e) {
@@ -46,17 +55,8 @@ export const AuthProvider = ({ children }) => {
 
   const loginWithGoogle = async (idToken) => {
     try {
-      const { user, token } = await loginWithGoogleIdToken(idToken);
-      setIsLoggedIn(true);
-      setUserData(user);
-      try {
-        window.localStorage.setItem(
-          "lotus_auth",
-          JSON.stringify({ user, token })
-        );
-      } catch (e) {
-        console.error("No se pudo guardar la sesión de Lotus Spa", e);
-      }
+      const { user, token } = await mainApi.loginWithGoogle(idToken);
+      persistSession({ user, token });
       return { success: true };
     } catch (error) {
       console.error("Error al iniciar sesión con Google", error);
@@ -64,9 +64,47 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const signup = async ({ name, email, password }) => {
+    try {
+      await mainApi.register({ name, email, password });
+      // tras el registro, iniciamos sesión directamente
+      const { token } = await mainApi.login({ email, password });
+      const user = { name, email };
+      persistSession({ user, token });
+      return { success: true };
+    } catch (error) {
+      console.error("Error en signup", error);
+      return { success: false, error };
+    }
+  };
+
+  const signin = async ({ email, password }) => {
+    try {
+      const { token } = await mainApi.login({ email, password });
+      const nameFromEmail = email.split("@")[0] || "Invitado";
+      const user = { email, name: nameFromEmail };
+      persistSession({ user, token });
+      return { success: true };
+    } catch (error) {
+      console.error("Error en signin", error);
+      return { success: false, error };
+    }
+  };
+
   return (
     <AuthContext.Provider
-      value={{ isLoggedIn, userData, login, logout, loginWithGoogle }}
+      value={{
+        isLoggedIn,
+        // currentUser: nombre que pide el enunciado para el estado global
+        currentUser,
+        // userData se mantiene por compatibilidad con componentes existentes
+        userData: currentUser,
+        login,
+        logout,
+        loginWithGoogle,
+        signup,
+        signin,
+      }}
     >
       {children}
     </AuthContext.Provider>

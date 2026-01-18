@@ -1,4 +1,5 @@
 import React from "react";
+import { useLocation } from "react-router-dom";
 import Navbar from "../Landing/Navbar/Navbar";
 import MainContent from "../Landing/MainContent/MainContent";
 import ContactSection from "../Landing/ContactSection/ContactSection";
@@ -16,10 +17,13 @@ import DiscountsSection from "../Landing/DiscountsSection/DiscountsSection";
 import DiscountModal from "../Modals/DiscountModal";
 
 function LandingPage() {
+  const location = useLocation();
+  const shouldOpenLogin = Boolean(location.state && location.state.forceAuth);
+
   return (
     <>
       <HeroSection />
-      <Navbar />
+      <Navbar initialShowLogin={shouldOpenLogin} />
       <SocialFloatingBar />
       <SocialSidebar />
       <ProductsSection />

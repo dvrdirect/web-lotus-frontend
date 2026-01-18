@@ -5,6 +5,7 @@ import Navbar from "../Landing/Navbar/Navbar";
 import Footer from "../Landing/Footer/Footer";
 import SocialFloatingBar from "../Landing/SocialFloatingBar/SocialFloatingBar";
 import { SERVICE_CATEGORIES } from "../../utils/servicesMenu";
+import { createReservation } from "../../api/reservationsApi";
 import "./BookingPage.css";
 
 function BookingPage() {
@@ -12,28 +13,59 @@ function BookingPage() {
   const [selectedServiceId, setSelectedServiceId] = useState(null);
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+  const [submitSuccess, setSubmitSuccess] = useState("");
 
   const selectedCategory = useMemo(
     () =>
       SERVICE_CATEGORIES.find(
-        (category) => category.id === selectedCategoryId
+        (category) => category.id === selectedCategoryId,
       ) || SERVICE_CATEGORIES[0],
-    [selectedCategoryId]
+    [selectedCategoryId],
   );
 
   const selectedService = useMemo(
     () =>
       selectedCategory.items.find((item) => item.id === selectedServiceId) ||
       null,
-    [selectedCategory, selectedServiceId]
+    [selectedCategory, selectedServiceId],
   );
 
   const canConfirm = selectedService && selectedDate && selectedTime;
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     if (!canConfirm) return;
-    // Aquí se integraría el flujo real de reserva.
+
+    setSubmitError("");
+    setSubmitSuccess("");
+    setIsSubmitting(true);
+
+    try {
+      const scheduledAt = new Date(`${selectedDate}T${selectedTime}:00`);
+
+      await createReservation({
+        // Guardamos el nombre del servicio tal como lo ve el usuario
+        serviceName: selectedService.name,
+        scheduledAt,
+        notes: null,
+      });
+
+      setSubmitSuccess("Tu reserva se ha creado correctamente.");
+      // Opcional: limpiar selección tras reservar
+      // setSelectedServiceId(null);
+      // setSelectedDate("");
+      // setSelectedTime("");
+    } catch (error) {
+      console.error("Error al crear la reserva", error);
+      setSubmitError(
+        error?.message ||
+          "No se pudo crear la reserva. Inténtalo de nuevo más tarde.",
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -162,12 +194,23 @@ function BookingPage() {
                 </p>
               )}
 
+              {submitError && (
+                <p className="booking-flow__feedback booking-flow__feedback--error">
+                  {submitError}
+                </p>
+              )}
+              {submitSuccess && (
+                <p className="booking-flow__feedback booking-flow__feedback--success">
+                  {submitSuccess}
+                </p>
+              )}
+
               <button
                 type="submit"
                 className="booking-flow__cta"
-                disabled={!canConfirm}
+                disabled={!canConfirm || isSubmitting}
               >
-                Confirmar Cita
+                {isSubmitting ? "Guardando..." : "Confirmar Cita"}
               </button>
             </form>
           </div>

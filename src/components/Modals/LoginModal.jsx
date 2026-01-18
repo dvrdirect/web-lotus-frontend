@@ -4,7 +4,7 @@ import { useAuth } from "../../context/AuthContext";
 import { GoogleLogin } from "@react-oauth/google";
 
 const LoginModal = ({ open, onClose, onSwitchToSignup }) => {
-  const { login } = useAuth();
+  const { signin, loginWithGoogle, login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
@@ -50,17 +50,24 @@ const LoginModal = ({ open, onClose, onSwitchToSignup }) => {
     setErrors((prev) => ({ ...prev, password: fieldErrors.password }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = validateValues({ email, password });
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
     }
-
-    const nameFromEmail = email.split("@")[0] || "Invitado";
-    login({ name: nameFromEmail, email });
-    onClose();
+    try {
+      const result = await signin({ email, password });
+      if (!result.success) {
+        setErrors({ general: "Correo o contraseña incorrectos" });
+        return;
+      }
+      onClose();
+    } catch (error) {
+      console.error("Error al iniciar sesión", error);
+      setErrors({ general: "No se pudo iniciar sesión. Inténtalo más tarde." });
+    }
   };
 
   const handleGoogleSuccess = async (credentialResponse) => {
@@ -75,7 +82,6 @@ const LoginModal = ({ open, onClose, onSwitchToSignup }) => {
         return;
       }
 
-      const { loginWithGoogle } = useAuth();
       const result = await loginWithGoogle(idToken);
       if (result.success) {
         onClose();
@@ -153,8 +159,19 @@ const LoginModal = ({ open, onClose, onSwitchToSignup }) => {
               </span>
             )}
           </div>
-
-          <button type="submit" className="auth-modal__button">
+          {errors.general && (
+            <div className="auth-modal__error-message auth-modal__error-message--general">
+              {errors.general}
+            </div>
+          )}
+          <button
+            type="submit"
+            className="auth-modal__button"
+            disabled={
+              !!validateValues({ email, password }).email ||
+              !!validateValues({ email, password }).password
+            }
+          >
             Entrar
           </button>
         </form>

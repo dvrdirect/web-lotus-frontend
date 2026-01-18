@@ -13,38 +13,6 @@ function ConsultationsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState("");
 
-  // Ejemplo estático de historial: mezcla de citas pasadas y próximas
-  const sampleHistory = [
-    {
-      id: 1,
-      serviceId: "limpieza-profunda",
-      date: "2026-01-10",
-      time: "12:00",
-      status: "Finalizada",
-    },
-    {
-      id: 2,
-      serviceId: "masaje-relajante-lotus",
-      date: "2026-01-20",
-      time: "17:30",
-      status: "Confirmada",
-    },
-    {
-      id: 3,
-      serviceId: "reflexologia-podal",
-      date: "2026-01-28",
-      time: "11:00",
-      status: "Confirmada",
-    },
-  ].map((item) => {
-    const service = SERVICES_FLAT.find((s) => s.id === item.serviceId);
-    return {
-      ...item,
-      serviceName: service?.name || "Tratamiento Lotus Spa",
-      categoryTitle: service?.categoryTitle || "",
-    };
-  });
-
   useEffect(() => {
     let isMounted = true;
 
@@ -89,9 +57,6 @@ function ConsultationsPage() {
     };
   }, []);
 
-  const appointmentsToShow =
-    reservations.length > 0 ? reservations : sampleHistory;
-
   return (
     <div className="account-page">
       <Navbar />
@@ -132,14 +97,14 @@ function ConsultationsPage() {
             </p>
           )}
 
-          {!isLoading && appointmentsToShow.length === 0 && !loadError && (
+          {!isLoading && reservations.length === 0 && !loadError && (
             <p className="consultations-list__feedback">
               Aún no tienes consultas registradas.
             </p>
           )}
 
           <ul className="consultations-list__items">
-            {appointmentsToShow.map((appointment) => (
+            {reservations.map((appointment) => (
               <li key={appointment.id} className="consultation-card">
                 <div className="consultation-card__header">
                   <div className="consultation-card__title-block">

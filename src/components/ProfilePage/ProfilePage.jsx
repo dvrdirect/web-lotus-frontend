@@ -9,7 +9,7 @@ import { updateProfile } from "../../api/userApi";
 import "./ProfilePage.css";
 
 function ProfilePage() {
-  const { userData } = useAuth();
+  const { userData, updateProfileLocally } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
@@ -34,22 +34,9 @@ function ProfilePage() {
       setSaving(true);
       setError("");
       const updated = await updateProfile(form);
-      // Refrescar estado local
+      // Refrescar estado global y sesión local
       if (updated && updated.name) {
-        // Actualiza AuthContext/localStorage con los nuevos datos
-        if (typeof window !== "undefined") {
-          try {
-            const stored = window.localStorage.getItem("lotus_auth");
-            const parsed = stored ? JSON.parse(stored) : null;
-            const token = parsed?.token || null;
-            window.localStorage.setItem(
-              "lotus_auth",
-              JSON.stringify({ user: updated, token }),
-            );
-          } catch (e) {
-            console.error("No se pudo actualizar la sesión", e);
-          }
-        }
+        updateProfileLocally(updated);
       }
       setIsEditing(false);
     } catch (e) {
@@ -111,6 +98,7 @@ function ProfilePage() {
                 {isEditing ? (
                   <input
                     className="account-page__input"
+                    type="tel"
                     value={form.phone}
                     onChange={(e) => handleChange("phone", e.target.value)}
                   />
@@ -125,7 +113,7 @@ function ProfilePage() {
                 {isEditing ? (
                   <input
                     className="account-page__input"
-                    placeholder="DD / MM / AAAA"
+                    type="date"
                     value={form.birthdate}
                     onChange={(e) => handleChange("birthdate", e.target.value)}
                   />

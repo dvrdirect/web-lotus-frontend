@@ -11,7 +11,7 @@ const testimonials = [
 ];
 // Carga automática de imágenes y videos del slideshow con Vite
 const mediaModules = import.meta.glob(
-  "../../images/slideshow/*.{jpg,jpeg,png,webp,mp4}",
+  "../../../images/slideshow/*.{jpg,jpeg,png,webp,mp4}",
   { eager: true },
 );
 

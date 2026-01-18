@@ -17,7 +17,7 @@
   position: absolute;
   inset: 0;
   /* Imagen de fondo semitransparente de cabina */
-  background-image: url("/src/images/backgrounds/image_1.png");
+  background-image: url("../../../images/backgrounds/image_1.png");
   background-size: cover;
   background-position: center;
   opacity: 0.22; /* efecto calmado y discreto */

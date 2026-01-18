@@ -2,21 +2,24 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "./ProductsSection.css";
 import PatternSection from "../../Shared/PatternSection/PatternSection";
+import image1 from "../../../images/backgrounds/image_1.png";
+import image2 from "../../../images/backgrounds/image_2.png";
+import image3 from "../../../images/backgrounds/image_3.png";
 
 const CARDS = [
   {
     title: "Resets Energéticos",
-    img: "/src/images/backgrounds/image_1.png",
+    img: image1,
     desc: "Liberar cargas, equilibrar tu energía y reconectar con tu esencia. Experiencias diseñadas para restaurar el balance cuerpo, mente y espíritu.",
   },
   {
     title: "Terapias de bienestar",
-    img: "/src/images/backgrounds/image_2.png",
+    img: image2,
     desc: "Técnicas tradicionales y contemporáneas para relajar, sanar y nutrir desde adentro. Una invitación a detenerte y cuidarte profundamente.",
   },
   {
     title: "Verte bien es sentirte bien",
-    img: "/src/images/backgrounds/image_3.png",
+    img: image3,
     desc: "Tratamientos de belleza consciente que combinan lujo, ciencia y naturaleza. Cuidamos tu piel y tu imagen desde un enfoque de bienestar integral.",
   },
 ];

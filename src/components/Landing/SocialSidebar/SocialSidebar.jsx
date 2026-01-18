@@ -25,7 +25,9 @@ const SLIDES = Object.keys(mediaModules)
     };
   });
 
-const SLIDE_DURATIONS = SLIDES.map((s) => (s.type === "video" ? 6000 : 3500));
+const SLIDE_DURATIONS = SLIDES.map((s) =>
+  s && s.type === "video" ? 6000 : 3500,
+);
 
 const SocialSidebar = () => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -45,7 +47,7 @@ const SocialSidebar = () => {
   const videoRefs = React.useRef([]);
 
   useEffect(() => {
-    if (slideshowPaused) return;
+    if (slideshowPaused || SLIDES.length === 0) return;
     setProgress(0);
     let start = Date.now();
     let raf;
@@ -65,7 +67,8 @@ const SocialSidebar = () => {
   }, [slide, slideshowPaused]);
 
   useEffect(() => {
-    if (SLIDES[slide].type !== "video") return;
+    const current = SLIDES[slide];
+    if (!current || current.type !== "video") return;
     const video = videoRefs.current[slide];
     if (!video) return;
     const onEnded = () => {
@@ -76,6 +79,7 @@ const SocialSidebar = () => {
   }, [slide]);
 
   const goTo = (idx) => {
+    if (!SLIDES.length) return;
     setSlide((idx + SLIDES.length) % SLIDES.length);
     setProgress(0);
   };

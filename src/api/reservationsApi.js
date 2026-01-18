@@ -13,7 +13,7 @@ function getAuthToken() {
   }
 }
 
-async function authorizedFetch(path, options = {}) {
+export async function authorizedFetch(path, options = {}) {
   const token = getAuthToken();
   if (!token) {
     throw new Error(

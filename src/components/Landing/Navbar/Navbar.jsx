@@ -8,7 +8,7 @@ import UserDropdown from "./UserDropdown";
 import NavReserveAction from "./NavReserveAction";
 import { useNavigate } from "react-router-dom";
 
-const Navbar = () => {
+const Navbar = ({ initialShowLogin = false }) => {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
   const { isLoggedIn, userData, logout } = useAuth();
@@ -17,6 +17,12 @@ const Navbar = () => {
   const handleLogout = () => {
     logout();
   };
+
+  useEffect(() => {
+    if (initialShowLogin) {
+      setShowLogin(true);
+    }
+  }, [initialShowLogin]);
 
   useEffect(() => {
     const handleOpenSignup = () => {

@@ -1,13 +1,18 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Clock3, CalendarDays } from "lucide-react";
 import Navbar from "../Landing/Navbar/Navbar";
 import Footer from "../Landing/Footer/Footer";
 import SocialFloatingBar from "../Landing/SocialFloatingBar/SocialFloatingBar";
 import { SERVICES_FLAT } from "../../utils/servicesMenu";
+import { getReservations } from "../../api/reservationsApi";
 import "./ConsultationsPage.css";
 
 function ConsultationsPage() {
+  const [reservations, setReservations] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState("");
+
   // Ejemplo estático de historial: mezcla de citas pasadas y próximas
   const sampleHistory = [
     {
@@ -40,6 +45,53 @@ function ConsultationsPage() {
     };
   });
 
+  useEffect(() => {
+    let isMounted = true;
+
+    const fetchData = async () => {
+      try {
+        const data = await getReservations();
+        if (!isMounted) return;
+
+        const mapped = (data || []).map((item) => {
+          const dateObj = item.scheduledAt ? new Date(item.scheduledAt) : null;
+          const date = dateObj ? dateObj.toISOString().slice(0, 10) : "";
+          const time = dateObj ? dateObj.toTimeString().slice(0, 5) : "";
+
+          return {
+            id: item._id,
+            serviceName: item.serviceName || "Tratamiento Lotus Spa",
+            categoryTitle: "",
+            date,
+            time,
+            status: "Confirmada",
+          };
+        });
+
+        setReservations(mapped);
+        setLoadError("");
+      } catch (error) {
+        console.error("Error al cargar reservas", error);
+        setLoadError(
+          error?.message || "No se pudo cargar tu historial de consultas.",
+        );
+      } finally {
+        if (isMounted) {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    fetchData();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const appointmentsToShow =
+    reservations.length > 0 ? reservations : sampleHistory;
+
   return (
     <div className="account-page">
       <Navbar />
@@ -68,8 +120,26 @@ function ConsultationsPage() {
             </p>
           </div>
 
+          {loadError && (
+            <p className="consultations-list__feedback consultations-list__feedback--error">
+              {loadError}
+            </p>
+          )}
+
+          {isLoading && !loadError && (
+            <p className="consultations-list__feedback">
+              Cargando tu historial de consultas...
+            </p>
+          )}
+
+          {!isLoading && appointmentsToShow.length === 0 && !loadError && (
+            <p className="consultations-list__feedback">
+              Aún no tienes consultas registradas.
+            </p>
+          )}
+
           <ul className="consultations-list__items">
-            {sampleHistory.map((appointment) => (
+            {appointmentsToShow.map((appointment) => (
               <li key={appointment.id} className="consultation-card">
                 <div className="consultation-card__header">
                   <div className="consultation-card__title-block">

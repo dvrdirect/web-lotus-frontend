@@ -7,7 +7,7 @@ import { GoogleLogin } from "@react-oauth/google";
 import { useAuth } from "../../context/AuthContext";
 
 const SignupModal = ({ open, onClose, onSwitchToLogin }) => {
-  const { loginWithGoogle } = useAuth();
+  const { loginWithGoogle, signup } = useAuth();
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -71,16 +71,25 @@ const SignupModal = ({ open, onClose, onSwitchToLogin }) => {
     setErrors((prev) => ({ ...prev, [field]: fieldErrors[field] }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = validateValues(form);
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
     }
-
-    setStep("loading");
-    setTimeout(() => {
+    try {
+      setStep("loading");
+      const result = await signup({
+        name: form.name,
+        email: form.email,
+        password: form.password,
+      });
+      if (!result.success) {
+        setStep("form");
+        setErrors({ general: "No se pudo completar el registro." });
+        return;
+      }
       setStep("success");
       setTimeout(() => {
         if (onSwitchToLogin) {
@@ -90,7 +99,13 @@ const SignupModal = ({ open, onClose, onSwitchToLogin }) => {
           onClose();
         }
       }, 3000);
-    }, 2000);
+    } catch (error) {
+      console.error("Error en registro", error);
+      setStep("form");
+      setErrors({
+        general: "No se pudo completar el registro. Inténtalo más tarde.",
+      });
+    }
   };
 
   const handleGoogleSuccess = async (credentialResponse) => {
@@ -248,8 +263,16 @@ const SignupModal = ({ open, onClose, onSwitchToLogin }) => {
                 </span>
               )}
             </div>
-
-            <button type="submit" className="auth-modal__button">
+            {errors.general && (
+              <div className="auth-modal__error-message auth-modal__error-message--general">
+                {errors.general}
+              </div>
+            )}
+            <button
+              type="submit"
+              className="auth-modal__button"
+              disabled={Object.keys(validateValues(form)).length > 0}
+            >
               Registrarme
             </button>
           </form>

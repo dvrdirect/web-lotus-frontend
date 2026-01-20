@@ -45,9 +45,9 @@ const ProductsSection = () => {
       <div className="products-section__header">
         <h2 className="products-section__headline">Nuestros Servicios</h2>
         <p className="products-section__copy">
-          Todos nuestros productos y servicios se alinean con la misión de
-          crear experiencias que equilibren cuerpo, mente y espíritu en un
-          cuidado consciente.
+          Todos nuestros productos y servicios se alinean con la misión de crear
+          experiencias que equilibren cuerpo, mente y espíritu en un cuidado
+          consciente.
         </p>
       </div>
       <div className="products-section__cards">

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./ProductsSection.css";
 import PatternSection from "../../Shared/PatternSection/PatternSection";
@@ -24,47 +24,83 @@ const CARDS = [
   },
 ];
 
-const ProductsSection = () => (
-  <PatternSection
-    id="productos"
-    variant="image"
-    imageKey="image1"
-    className="products-section"
-  >
-    <div className="products-section__header">
-      <h2 className="products-section__headline">Nuestros Servicios</h2>
-      <p className="products-section__copy">
-        Todos nuestros productos y servicios se alinean con la misión de crear
-        experiencias que equilibren cuerpo, mente y espíritu en un cuidado
-        consciente.
-      </p>
-    </div>
-    <div className="products-section__cards">
-      {CARDS.map((card, i) => (
-        <div className="products-section__card" key={i}>
-          <div className="products-section__card-img-wrap">
-            <img
-              className="products-section__card-img"
-              src={card.img}
-              alt={card.title}
-              loading="lazy"
-            />
+const ProductsSection = () => {
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const handlePrev = () => {
+    setActiveIndex((prev) => (prev - 1 + CARDS.length) % CARDS.length);
+  };
+
+  const handleNext = () => {
+    setActiveIndex((prev) => (prev + 1) % CARDS.length);
+  };
+
+  return (
+    <PatternSection
+      id="productos"
+      variant="image"
+      imageKey="image1"
+      className="products-section"
+    >
+      <div className="products-section__header">
+        <h2 className="products-section__headline">Nuestros Servicios</h2>
+        <p className="products-section__copy">
+          Todos nuestros productos y servicios se alinean con la misión de
+          crear experiencias que equilibren cuerpo, mente y espíritu en un
+          cuidado consciente.
+        </p>
+      </div>
+      <div className="products-section__cards">
+        {CARDS.map((card, i) => (
+          <div
+            className={
+              "products-section__card" +
+              (i === activeIndex ? " products-section__card--active" : "")
+            }
+            key={i}
+          >
+            <div className="products-section__card-img-wrap">
+              <img
+                className="products-section__card-img"
+                src={card.img}
+                alt={card.title}
+                loading="lazy"
+              />
+            </div>
+            <h3 className="products-section__card-title">{card.title}</h3>
+            <p className="products-section__card-desc">{card.desc}</p>
           </div>
-          <h3 className="products-section__card-title">{card.title}</h3>
-          <p className="products-section__card-desc">{card.desc}</p>
-        </div>
-      ))}
-    </div>
-    <div className="products-section__cta-wrap">
-      <Link
-        className="products-section__cta"
-        to="/products"
-        aria-label="Ver lista completa de servicios"
-      >
-        Ver lista completa de servicios
-      </Link>
-    </div>
-  </PatternSection>
-);
+        ))}
+      </div>
+      <div className="products-section__nav" aria-hidden="false">
+        <button
+          type="button"
+          className="products-section__nav-button"
+          onClick={handlePrev}
+          aria-label="Ver servicio anterior"
+        >
+          ◀
+        </button>
+        <button
+          type="button"
+          className="products-section__nav-button"
+          onClick={handleNext}
+          aria-label="Ver siguiente servicio"
+        >
+          ▶
+        </button>
+      </div>
+      <div className="products-section__cta-wrap">
+        <Link
+          className="products-section__cta"
+          to="/products"
+          aria-label="Ver lista completa de servicios"
+        >
+          Ver lista completa de servicios
+        </Link>
+      </div>
+    </PatternSection>
+  );
+};
 
 export default ProductsSection;

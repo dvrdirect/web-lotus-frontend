@@ -1,5 +1,10 @@
 import React, { useMemo, useRef, useState } from "react";
-import { findAdminUser, addPastAppointment } from "../../api/adminApi";
+import {
+  findAdminUser,
+  addPastAppointment,
+  getAdminReservations,
+  deleteAdminReservation,
+} from "../../api/adminApi";
 import "./AdminAppointments.css";
 
 const ADMIN_EMAIL = "dvrdirect@gmail.com";
@@ -50,9 +55,7 @@ const AdminAppointments = ({ user }) => {
       setClient(result.user);
       // fetch reservations from admin API
       try {
-        const res = await (
-          await import("../../api/adminApi")
-        ).getAdminReservations(result.user.id);
+        const res = await getAdminReservations(result.user.id);
         setClientReservations(res.reservations || []);
       } catch (e) {
         setClientReservations([]);
@@ -81,8 +84,6 @@ const AdminAppointments = ({ user }) => {
     if (!ok) return;
 
     try {
-      // dynamic import to avoid circular deps
-      const { deleteAdminReservation } = await import("../../api/adminApi");
       const result = await deleteAdminReservation(reservationId);
       // remove from local state
       setClientReservations((prev) =>
@@ -142,6 +143,13 @@ const AdminAppointments = ({ user }) => {
         };
       });
       setForm({ date: "", service: "", notes: "" });
+      // refresh reservations list
+      try {
+        const res = await getAdminReservations(client.id);
+        setClientReservations(res.reservations || []);
+      } catch (e) {
+        // ignore
+      }
     } catch (error) {
       if (error.status === 403) {
         setSaveError("No autorizado.");

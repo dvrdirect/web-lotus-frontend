@@ -9,66 +9,25 @@ const testimonials = [
   { text: "Volveré cada mes, ¡gracias!", author: "Carmen T." },
   { text: "Un lugar para consentirse de verdad.", author: "Valeria M." },
 ];
+// Carga automática de imágenes y videos del slideshow con Vite
+const mediaModules = import.meta.glob(
+  "../../../images/slideshow/*.{jpg,jpeg,png,webp,mp4}",
+  { eager: true },
+);
 
-const SLIDES = [
-  { type: "image", src: "/src/images/slideshow/IMG-20260110-WA0018.jpg" },
-  { type: "image", src: "/src/images/slideshow/IMG-20260110-WA0019.jpg" },
-  { type: "image", src: "/src/images/slideshow/IMG-20260110-WA0020.jpg" },
-  { type: "image", src: "/src/images/slideshow/IMG-20260110-WA0021.jpg" },
-  { type: "image", src: "/src/images/slideshow/IMG-20260110-WA0022.jpg" },
-  { type: "image", src: "/src/images/slideshow/IMG-20260110-WA0023.jpg" },
-  { type: "image", src: "/src/images/slideshow/IMG-20260110-WA0024.jpg" },
-  { type: "image", src: "/src/images/slideshow/IMG-20260110-WA0025.jpg" },
-  { type: "image", src: "/src/images/slideshow/IMG-20260110-WA0026.jpg" },
-  { type: "image", src: "/src/images/slideshow/IMG-20260110-WA0027.jpg" },
-  { type: "image", src: "/src/images/slideshow/IMG-20260110-WA0028.jpg" },
-  { type: "image", src: "/src/images/slideshow/IMG-20260110-WA0029.jpg" },
-  { type: "image", src: "/src/images/slideshow/IMG-20260110-WA0030.jpg" },
-  { type: "image", src: "/src/images/slideshow/IMG-20260110-WA0031.jpg" },
-  { type: "image", src: "/src/images/slideshow/IMG-20260110-WA0032.jpg" },
-  { type: "image", src: "/src/images/slideshow/IMG-20260110-WA0033.jpg" },
-  { type: "image", src: "/src/images/slideshow/IMG-20260110-WA0034.jpg" },
-  { type: "image", src: "/src/images/slideshow/IMG-20260110-WA0035.jpg" },
-  { type: "image", src: "/src/images/slideshow/IMG-20260110-WA0036.jpg" },
-  { type: "image", src: "/src/images/slideshow/IMG-20260110-WA0037.jpg" },
-  { type: "image", src: "/src/images/slideshow/IMG-20260110-WA0038.jpg" },
-  { type: "image", src: "/src/images/slideshow/IMG-20260110-WA0039.jpg" },
-  { type: "image", src: "/src/images/slideshow/IMG-20260110-WA0040.jpg" },
-  { type: "image", src: "/src/images/slideshow/IMG-20260110-WA0041.jpg" },
-  { type: "image", src: "/src/images/slideshow/IMG-20260110-WA0042.jpg" },
-  { type: "image", src: "/src/images/slideshow/IMG-20260110-WA0043.jpg" },
-  { type: "image", src: "/src/images/slideshow/IMG-20260110-WA0044.jpg" },
-  { type: "image", src: "/src/images/slideshow/IMG-20260110-WA0045.jpg" },
-  { type: "image", src: "/src/images/slideshow/IMG-20260110-WA0046.jpg" },
-  { type: "video", src: "/src/images/slideshow/VID-20260110-WA0047.mp4" },
-  { type: "image", src: "/src/images/slideshow/IMG-20260110-WA0048.jpg" },
-  { type: "image", src: "/src/images/slideshow/IMG-20260110-WA0049.jpg" },
-  { type: "image", src: "/src/images/slideshow/IMG-20260110-WA0050.jpg" },
-  { type: "image", src: "/src/images/slideshow/IMG-20260110-WA0051.jpg" },
-  { type: "image", src: "/src/images/slideshow/IMG-20260110-WA0052.jpg" },
-  { type: "image", src: "/src/images/slideshow/IMG-20260110-WA0053.jpg" },
-  { type: "image", src: "/src/images/slideshow/IMG-20260110-WA0054.jpg" },
-  { type: "image", src: "/src/images/slideshow/IMG-20260110-WA0055.jpg" },
-  { type: "image", src: "/src/images/slideshow/IMG-20260110-WA0056.jpg" },
-  { type: "image", src: "/src/images/slideshow/IMG-20260110-WA0057.jpg" },
-  { type: "image", src: "/src/images/slideshow/IMG-20260110-WA0058.jpg" },
-  { type: "image", src: "/src/images/slideshow/IMG-20260110-WA0059.jpg" },
-  { type: "image", src: "/src/images/slideshow/IMG-20260110-WA0060.jpg" },
-  { type: "image", src: "/src/images/slideshow/IMG-20260110-WA0061.jpg" },
-  { type: "image", src: "/src/images/slideshow/IMG-20260110-WA0062.jpg" },
-  { type: "image", src: "/src/images/slideshow/IMG-20260110-WA0063.jpg" },
-  { type: "image", src: "/src/images/slideshow/IMG-20260110-WA0064.jpg" },
-  { type: "image", src: "/src/images/slideshow/IMG-20260110-WA0065.jpg" },
-  { type: "image", src: "/src/images/slideshow/IMG-20260110-WA0066.jpg" },
-  { type: "image", src: "/src/images/slideshow/IMG-20260110-WA0067.jpg" },
-  { type: "image", src: "/src/images/slideshow/IMG-20260110-WA0068.jpg" },
-  { type: "image", src: "/src/images/slideshow/IMG-20260110-WA0069.jpg" },
-  { type: "video", src: "/src/images/slideshow/VID-20260110-WA0070.mp4" },
-  { type: "video", src: "/src/images/slideshow/VID-20260110-WA0071.mp4" },
-  { type: "video", src: "/src/images/slideshow/VID-20260110-WA0072.mp4" },
-];
+const SLIDES = Object.keys(mediaModules)
+  .sort()
+  .map((path) => {
+    const isVideo = path.toLowerCase().endsWith(".mp4");
+    return {
+      type: isVideo ? "video" : "image",
+      src: mediaModules[path].default,
+    };
+  });
 
-const SLIDE_DURATIONS = SLIDES.map((s) => (s.type === "video" ? 6000 : 3500));
+const SLIDE_DURATIONS = SLIDES.map((s) =>
+  s && s.type === "video" ? 6000 : 3500,
+);
 
 const SocialSidebar = () => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -76,7 +35,7 @@ const SocialSidebar = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setActiveIndex((prev) =>
-        prev === testimonials.length - 1 ? 0 : prev + 1
+        prev === testimonials.length - 1 ? 0 : prev + 1,
       );
     }, 5000);
     return () => clearInterval(interval);
@@ -88,7 +47,7 @@ const SocialSidebar = () => {
   const videoRefs = React.useRef([]);
 
   useEffect(() => {
-    if (slideshowPaused) return;
+    if (slideshowPaused || SLIDES.length === 0) return;
     setProgress(0);
     let start = Date.now();
     let raf;
@@ -108,7 +67,8 @@ const SocialSidebar = () => {
   }, [slide, slideshowPaused]);
 
   useEffect(() => {
-    if (SLIDES[slide].type !== "video") return;
+    const current = SLIDES[slide];
+    if (!current || current.type !== "video") return;
     const video = videoRefs.current[slide];
     if (!video) return;
     const onEnded = () => {
@@ -119,6 +79,7 @@ const SocialSidebar = () => {
   }, [slide]);
 
   const goTo = (idx) => {
+    if (!SLIDES.length) return;
     setSlide((idx + SLIDES.length) % SLIDES.length);
     setProgress(0);
   };
@@ -151,7 +112,7 @@ const SocialSidebar = () => {
                 aria-label="Anterior"
                 onClick={() =>
                   setActiveIndex((prev) =>
-                    prev === 0 ? testimonials.length - 1 : prev - 1
+                    prev === 0 ? testimonials.length - 1 : prev - 1,
                   )
                 }
               >
@@ -162,7 +123,7 @@ const SocialSidebar = () => {
                 aria-label="Siguiente"
                 onClick={() =>
                   setActiveIndex((prev) =>
-                    prev === testimonials.length - 1 ? 0 : prev + 1
+                    prev === testimonials.length - 1 ? 0 : prev + 1,
                   )
                 }
               >

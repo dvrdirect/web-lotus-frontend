@@ -13,12 +13,12 @@ function getAuthToken() {
   }
 }
 
-export async function authorizedFetch(path, options = {}) {
+async function adminFetch(path, options = {}) {
   const token = getAuthToken();
   if (!token) {
-    throw new Error(
-      "No hay token de autenticación. Inicia sesión para continuar.",
-    );
+    const error = new Error("No hay token de autenticación");
+    error.status = 401;
+    throw error;
   }
 
   const headers = {
@@ -33,26 +33,27 @@ export async function authorizedFetch(path, options = {}) {
 
   if (!response.ok) {
     const errorText = await response.text().catch(() => "");
-    throw new Error(
-      errorText || "La solicitud al servidor de reservas no se pudo completar.",
-    );
+    const error = new Error(errorText || "La solicitud no se pudo completar.");
+    error.status = response.status;
+    throw error;
   }
 
   return response.json();
 }
 
-// GET /api/reservations - obtiene las reservas del usuario autenticado
-export async function getReservations() {
-  return authorizedFetch("/reservations", { method: "GET" });
+export async function findAdminUser({ email, id }) {
+  const params = new URLSearchParams();
+  if (email) params.set("email", email);
+  if (id) params.set("id", id);
+  return adminFetch(`/admin/user?${params.toString()}`, { method: "GET" });
 }
 
-// POST /api/reservations - crea una nueva reserva para el usuario autenticado
-export async function createReservation({ serviceName, scheduledAt, notes }) {
-  return authorizedFetch("/reservations", {
+export async function addPastAppointment({ userId, date, service, notes }) {
+  return adminFetch("/admin/add-past-appointment", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ serviceName, scheduledAt, notes }),
+    body: JSON.stringify({ userId, date, service, notes }),
   });
 }

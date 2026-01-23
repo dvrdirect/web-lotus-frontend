@@ -51,7 +51,10 @@
   color: #b97c8b;
   font-weight: 600;
   text-decoration: none;
-  transition: box-shadow 0.3s, transform 0.3s, opacity 0.3s;
+  transition:
+    box-shadow 0.3s,
+    transform 0.3s,
+    opacity 0.3s;
   cursor: pointer;
   border: none;
 }
@@ -92,13 +95,13 @@
   color: #7a6e63;
   font-weight: 400;
 }
-.contact-section__phone {
+.contact-section__schedule {
   background: #fff;
   color: #b97c8b;
   border: 2px solid #f3e6e1;
   font-weight: 600;
 }
-.contact-section__phone-icon {
+.contact-section__schedule-icon {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -108,15 +111,36 @@
   height: 2em;
   box-shadow: 0 2px 8px 0 rgba(185, 124, 139, 0.08);
 }
-.contact-section__phone-label {
+.contact-section__schedule-label {
   font-size: 1.08rem;
   font-weight: 600;
   margin-right: 0.5em;
 }
-.contact-section__phone-number {
-  font-size: 1.08rem;
+.contact-section__schedule-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1;
+}
+.contact-section__schedule-range {
+  font-size: 0.95rem;
   color: #7a6e63;
   font-weight: 400;
+}
+.contact-section__status-badge {
+  padding: 0.35em 0.8em;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.contact-section__status-badge--open {
+  background: #e3f7f0;
+  color: #1b7a4a;
+}
+.contact-section__status-badge--closed {
+  background: #fbeff3;
+  color: #b97c8b;
 }
 .contact-section__socials {
   display: flex;
@@ -134,7 +158,10 @@
   border-radius: 50%;
   background: #fff;
   box-shadow: 0 2px 8px 0 rgba(185, 124, 139, 0.08);
-  transition: box-shadow 0.3s, opacity 0.3s, transform 0.3s;
+  transition:
+    box-shadow 0.3s,
+    opacity 0.3s,
+    transform 0.3s;
   color: #b97c8b;
   font-size: 1.2em;
   text-decoration: none;

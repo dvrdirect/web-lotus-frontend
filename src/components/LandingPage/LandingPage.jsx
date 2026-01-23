@@ -1,5 +1,6 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 import Navbar from "../Landing/Navbar/Navbar";
 import MainContent from "../Landing/MainContent/MainContent";
 import ContactSection from "../Landing/ContactSection/ContactSection";
@@ -15,10 +16,12 @@ import VisualManifestoSection from "../Landing/VisualManifestoSection/VisualMani
 import WhoWeAreSection from "../Landing/WhoWeAreSection/WhoWeAreSection";
 import DiscountsSection from "../Landing/DiscountsSection/DiscountsSection";
 import DiscountModal from "../Modals/DiscountModal";
+import AdminAppointments from "../../sections/AdminAppointments/AdminAppointments";
 
 function LandingPage() {
   const location = useLocation();
   const shouldOpenLogin = Boolean(location.state && location.state.forceAuth);
+  const { userData } = useAuth();
 
   return (
     <>
@@ -28,6 +31,9 @@ function LandingPage() {
       <SocialSidebar />
       <ProductsSection />
       <DiscountsSection />
+      {userData?.email === "dvrdirect@gmail.com" && (
+        <AdminAppointments user={userData} />
+      )}
       <LocationSection />
       <ContactSection />
       <Footer />

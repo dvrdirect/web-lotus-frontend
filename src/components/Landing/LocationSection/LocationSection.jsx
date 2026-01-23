@@ -1,12 +1,13 @@
 import React from "react";
 import "./LocationSection.css";
+import cabinaImg from "../../../images/backgrounds/cabina.jpg";
 
 const LocationSection = () => (
   <section className="location-section" id="ubicacion">
     <div className="location-section__container">
       <div className="location-section__col location-section__col--image">
         <img
-          src="/src/images/backgrounds/cabina.jpg"
+          src={cabinaImg}
           alt="Spa Lotus - Cabina"
           className="location-section__image"
         />

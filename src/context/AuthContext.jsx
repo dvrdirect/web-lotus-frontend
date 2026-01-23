@@ -91,6 +91,24 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const updateProfileLocally = (updates) => {
+    setCurrentUser((prev) => {
+      const merged = { ...(prev || {}), ...updates };
+      try {
+        const stored = window.localStorage.getItem("lotus_auth");
+        const parsed = stored ? JSON.parse(stored) : null;
+        const token = parsed?.token || null;
+        window.localStorage.setItem(
+          "lotus_auth",
+          JSON.stringify({ user: merged, token }),
+        );
+      } catch (e) {
+        console.error("No se pudo actualizar el perfil localmente", e);
+      }
+      return merged;
+    });
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -104,6 +122,7 @@ export const AuthProvider = ({ children }) => {
         loginWithGoogle,
         signup,
         signin,
+        updateProfileLocally,
       }}
     >
       {children}

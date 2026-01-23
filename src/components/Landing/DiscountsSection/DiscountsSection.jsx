@@ -1,22 +1,25 @@
 import React, { useState, useEffect } from "react";
 import "./DiscountSection.css";
 import PatternSection from "../../Shared/PatternSection/PatternSection";
+import adMoldea from "../../../images/ads/ad_moldea_tu_cuerpo.jpg";
+import adVerrugas from "../../../images/ads/ad_eliminacion_verrugas.jpg";
+import adLimpieza from "../../../images/ads/ad_limpieza_facial.jpg";
 
 const DISCOUNTS = [
   {
     title: "Moldea tu cuerpo",
     desc: "Super promo 50% a solo $399",
-    img: "/src/images/ads/ad_moldea_tu_cuerpo.jpg",
+    img: adMoldea,
   },
   {
     title: "Eliminación de verrugas",
     desc: "Consulta por precio especial",
-    img: "/src/images/ads/ad_eliminacion_verrugas.jpg",
+    img: adVerrugas,
   },
   {
     title: "Limpieza facial completa",
     desc: "50% a solo $399",
-    img: "/src/images/ads/ad_limpieza_facial.jpg",
+    img: adLimpieza,
   },
 ];
 

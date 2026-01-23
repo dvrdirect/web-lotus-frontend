@@ -17,7 +17,7 @@
   position: absolute;
   inset: 0;
   /* Imagen de fondo semitransparente de cabina */
-  background-image: url("/src/images/backgrounds/image_1.png");
+  background-image: url("../../../images/backgrounds/image_1.png");
   background-size: cover;
   background-position: center;
   opacity: 0.22; /* efecto calmado y discreto */
@@ -125,7 +125,8 @@
   border-radius: 2rem;
   padding: 0.85em 2.5em;
   cursor: pointer;
-  transition: background 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+  transition:
+    background 0.4s cubic-bezier(0.4, 0, 0.2, 1),
     color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
     transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: none;

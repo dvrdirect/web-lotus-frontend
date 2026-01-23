@@ -46,6 +46,11 @@ export async function getReservations() {
   return authorizedFetch("/reservations", { method: "GET" });
 }
 
+// GET /api/reservations/my - historial del usuario autenticado
+export async function getMyReservations() {
+  return authorizedFetch("/reservations/my", { method: "GET" });
+}
+
 // POST /api/reservations - crea una nueva reserva para el usuario autenticado
 export async function createReservation({ serviceName, scheduledAt, notes }) {
   return authorizedFetch("/reservations", {

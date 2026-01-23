@@ -5,7 +5,7 @@ import Navbar from "../Landing/Navbar/Navbar";
 import Footer from "../Landing/Footer/Footer";
 import SocialFloatingBar from "../Landing/SocialFloatingBar/SocialFloatingBar";
 import { SERVICES_FLAT } from "../../utils/servicesMenu";
-import { getReservations } from "../../api/reservationsApi";
+import { getMyReservations } from "../../api/reservationsApi";
 import "./ConsultationsPage.css";
 
 function ConsultationsPage() {
@@ -18,21 +18,44 @@ function ConsultationsPage() {
 
     const fetchData = async () => {
       try {
-        const data = await getReservations();
+        const data = await getMyReservations();
         if (!isMounted) return;
 
+        const now = new Date();
         const mapped = (data || []).map((item) => {
-          const dateObj = item.scheduledAt ? new Date(item.scheduledAt) : null;
-          const date = dateObj ? dateObj.toISOString().slice(0, 10) : "";
-          const time = dateObj ? dateObj.toTimeString().slice(0, 5) : "";
+          const rawDate = item.scheduledAt || item.date;
+          const dateObj = rawDate ? new Date(rawDate) : null;
+          const date = dateObj
+            ? dateObj.toLocaleDateString("es-MX", {
+                year: "numeric",
+                month: "short",
+                day: "2-digit",
+              })
+            : "";
+          const time = dateObj
+            ? dateObj.toLocaleTimeString("es-MX", {
+                hour: "2-digit",
+                minute: "2-digit",
+              })
+            : "";
+
+          let statusKey = "completed";
+          if (item.status === "cancelled") {
+            statusKey = "cancelled";
+          } else if (item.status === "completed") {
+            statusKey = "completed";
+          } else if (dateObj && dateObj > now) {
+            statusKey = "upcoming";
+          }
 
           return {
             id: item._id,
-            serviceName: item.serviceName || "Tratamiento Lotus Spa",
+            serviceName:
+              item.serviceName || item.service || "Tratamiento Lotus Spa",
             categoryTitle: "",
             date,
             time,
-            status: "Confirmada",
+            status: statusKey,
           };
         });
 

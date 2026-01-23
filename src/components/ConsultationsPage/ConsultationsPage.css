@@ -48,16 +48,22 @@
   color: #7a3e4f;
 }
 
-.consultation-card__status--finalizada {
+.consultation-card__status--completed {
   background: rgba(209, 250, 229, 0.9);
   border-color: rgba(16, 185, 129, 0.35);
   color: #047857;
 }
 
-.consultation-card__status--confirmada {
+.consultation-card__status--upcoming {
   background: rgba(239, 246, 255, 0.96);
   border-color: rgba(59, 130, 246, 0.35);
   color: #1d4ed8;
+}
+
+.consultation-card__status--cancelled {
+  background: rgba(254, 226, 226, 0.92);
+  border-color: rgba(239, 68, 68, 0.35);
+  color: #b91c1c;
 }
 
 .consultation-card__meta {

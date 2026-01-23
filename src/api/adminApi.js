@@ -61,9 +61,13 @@ export async function addPastAppointment({ userId, date, service, notes }) {
 export async function getAdminReservations(userId) {
   const params = new URLSearchParams();
   params.set("userId", userId);
-  return adminFetch(`/admin/reservations?${params.toString()}`, { method: "GET" });
+  return adminFetch(`/admin/reservations?${params.toString()}`, {
+    method: "GET",
+  });
 }
 
 export async function deleteAdminReservation(reservationId) {
-  return adminFetch(`/admin/reservations/${reservationId}`, { method: "DELETE" });
+  return adminFetch(`/admin/reservations/${reservationId}`, {
+    method: "DELETE",
+  });
 }

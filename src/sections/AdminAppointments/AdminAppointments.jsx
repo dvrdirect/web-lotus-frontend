@@ -50,7 +50,9 @@ const AdminAppointments = ({ user }) => {
       setClient(result.user);
       // fetch reservations from admin API
       try {
-        const res = await (await import("../../api/adminApi")).getAdminReservations(result.user.id);
+        const res = await (
+          await import("../../api/adminApi")
+        ).getAdminReservations(result.user.id);
         setClientReservations(res.reservations || []);
       } catch (e) {
         setClientReservations([]);
@@ -83,15 +85,19 @@ const AdminAppointments = ({ user }) => {
       const { deleteAdminReservation } = await import("../../api/adminApi");
       const result = await deleteAdminReservation(reservationId);
       // remove from local state
-      setClientReservations((prev) => prev.filter((r) => r._id !== reservationId));
+      setClientReservations((prev) =>
+        prev.filter((r) => r._id !== reservationId),
+      );
       // update client counts/history if backend returned them
       if (result.data) {
         setClient((prev) => {
           if (!prev) return prev;
           return {
             ...prev,
-            appointmentsCount: result.data.appointmentsCount ?? prev.appointmentsCount,
-            appointmentsHistory: result.data.appointmentsHistory ?? prev.appointmentsHistory,
+            appointmentsCount:
+              result.data.appointmentsCount ?? prev.appointmentsCount,
+            appointmentsHistory:
+              result.data.appointmentsHistory ?? prev.appointmentsHistory,
           };
         });
       }
@@ -263,9 +269,15 @@ const AdminAppointments = ({ user }) => {
                     {clientReservations.map((r) => (
                       <li key={r._id} className="admin-appointments__row">
                         <div className="admin-appointments__row-info">
-                          <span className="admin-appointments__service">{r.serviceName}</span>
-                          <span className="admin-appointments__date">{new Date(r.scheduledAt).toLocaleDateString()}</span>
-                          <span className="admin-appointments__status">{r.status}</span>
+                          <span className="admin-appointments__service">
+                            {r.serviceName}
+                          </span>
+                          <span className="admin-appointments__date">
+                            {new Date(r.scheduledAt).toLocaleDateString()}
+                          </span>
+                          <span className="admin-appointments__status">
+                            {r.status}
+                          </span>
                         </div>
                         <button
                           type="button"

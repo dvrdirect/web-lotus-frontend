@@ -10,6 +10,7 @@ const AdminAppointments = ({ user }) => {
   const [isSearching, setIsSearching] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [client, setClient] = useState(null);
+  const [clientReservations, setClientReservations] = useState([]);
   const [searchError, setSearchError] = useState("");
   const [saveError, setSaveError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -47,6 +48,13 @@ const AdminAppointments = ({ user }) => {
           : { id: searchValue.trim() };
       const result = await findAdminUser(payload);
       setClient(result.user);
+      // fetch reservations from admin API
+      try {
+        const res = await (await import("../../api/adminApi")).getAdminReservations(result.user.id);
+        setClientReservations(res.reservations || []);
+      } catch (e) {
+        setClientReservations([]);
+      }
       setTimeout(() => {
         detailsRef.current?.scrollIntoView({ behavior: "smooth" });
       }, 100);
@@ -60,6 +68,35 @@ const AdminAppointments = ({ user }) => {
       }
     } finally {
       setIsSearching(false);
+    }
+  };
+
+  const handleDeleteReservation = async (reservationId) => {
+    if (!client) return;
+    const ok = window.confirm(
+      "¿Seguro que deseas eliminar esta reserva? Esta acción no se puede deshacer.",
+    );
+    if (!ok) return;
+
+    try {
+      // dynamic import to avoid circular deps
+      const { deleteAdminReservation } = await import("../../api/adminApi");
+      const result = await deleteAdminReservation(reservationId);
+      // remove from local state
+      setClientReservations((prev) => prev.filter((r) => r._id !== reservationId));
+      // update client counts/history if backend returned them
+      if (result.data) {
+        setClient((prev) => {
+          if (!prev) return prev;
+          return {
+            ...prev,
+            appointmentsCount: result.data.appointmentsCount ?? prev.appointmentsCount,
+            appointmentsHistory: result.data.appointmentsHistory ?? prev.appointmentsHistory,
+          };
+        });
+      }
+    } catch (error) {
+      alert("No se pudo eliminar la reserva.");
     }
   };
 
@@ -215,6 +252,33 @@ const AdminAppointments = ({ user }) => {
               <p className="admin-appointments__empty">
                 Busca una clienta para ver sus datos.
               </p>
+            )}
+            {client && (
+              <div className="admin-appointments__reservations">
+                <h4 className="admin-appointments__subhead">Reservas</h4>
+                {clientReservations.length === 0 ? (
+                  <p className="admin-appointments__empty">Sin reservas</p>
+                ) : (
+                  <ul className="admin-appointments__list">
+                    {clientReservations.map((r) => (
+                      <li key={r._id} className="admin-appointments__row">
+                        <div className="admin-appointments__row-info">
+                          <span className="admin-appointments__service">{r.serviceName}</span>
+                          <span className="admin-appointments__date">{new Date(r.scheduledAt).toLocaleDateString()}</span>
+                          <span className="admin-appointments__status">{r.status}</span>
+                        </div>
+                        <button
+                          type="button"
+                          className="admin-appointments__delete"
+                          onClick={() => handleDeleteReservation(r._id)}
+                        >
+                          ❌ Eliminar
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
             )}
           </article>
         </div>

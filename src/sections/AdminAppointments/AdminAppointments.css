@@ -198,9 +198,110 @@
   color: #9a8f86;
 }
 
+.admin-appointments__reservations-scroll {
+  max-height: 360px;
+  overflow-y: auto;
+  padding-right: 0.4rem;
+}
+
+.admin-appointments__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+}
+
+.admin-appointments__reservation {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  background: #fdfbfa;
+  border-radius: 16px;
+  padding: 1rem 1.2rem;
+  border: 1px solid rgba(185, 124, 139, 0.16);
+}
+
+.admin-appointments__reservation-main {
+  display: grid;
+  gap: 0.4rem;
+  color: #4a3832;
+}
+
+.admin-appointments__reservation-title,
+.admin-appointments__reservation-date,
+.admin-appointments__reservation-notes {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.admin-appointments__reservation-notes {
+  color: #7a6e63;
+  font-size: 0.9rem;
+}
+
+.admin-appointments__reservation-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.6rem;
+}
+
+.admin-appointments__badge {
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.35rem 0.6rem;
+  border-radius: 999px;
+  font-weight: 600;
+  color: #fff;
+  background: #b97c8b;
+}
+
+.admin-appointments__badge--completed {
+  background: #6f9b7c;
+}
+
+.admin-appointments__badge--confirmed {
+  background: #8aa0b8;
+}
+
+.admin-appointments__badge--pending {
+  background: #c9a06a;
+}
+
+.admin-appointments__badge--cancelled {
+  background: #b36a6a;
+}
+
+.admin-appointments__delete {
+  border: none;
+  background: transparent;
+  color: #b36a6a;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.admin-appointments__delete:hover {
+  color: #a04f4f;
+}
+
 @media (max-width: 640px) {
   .admin-appointments__client {
     flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .admin-appointments__reservation {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .admin-appointments__reservation-actions {
+    width: 100%;
     align-items: flex-start;
   }
 }

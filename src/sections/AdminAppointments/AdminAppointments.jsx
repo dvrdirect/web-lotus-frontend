@@ -15,7 +15,7 @@ const AdminAppointments = ({ user }) => {
   const [isSearching, setIsSearching] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [client, setClient] = useState(null);
-  const [clientReservations, setClientReservations] = useState([]);
+  const [reservations, setReservations] = useState([]);
   const [searchError, setSearchError] = useState("");
   const [saveError, setSaveError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -56,9 +56,9 @@ const AdminAppointments = ({ user }) => {
       // fetch reservations from admin API
       try {
         const res = await getAdminReservations(result.user.id);
-        setClientReservations(res.reservations || []);
+        setReservations(res.reservations || []);
       } catch (e) {
-        setClientReservations([]);
+        setReservations([]);
       }
       setTimeout(() => {
         detailsRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -86,9 +86,7 @@ const AdminAppointments = ({ user }) => {
     try {
       const result = await deleteAdminReservation(reservationId);
       // remove from local state
-      setClientReservations((prev) =>
-        prev.filter((r) => r._id !== reservationId),
-      );
+      setReservations((prev) => prev.filter((r) => r._id !== reservationId));
       // update client counts/history if backend returned them
       if (result.data) {
         setClient((prev) => {
@@ -146,7 +144,7 @@ const AdminAppointments = ({ user }) => {
       // refresh reservations list
       try {
         const res = await getAdminReservations(client.id);
-        setClientReservations(res.reservations || []);
+        setReservations(res.reservations || []);
       } catch (e) {
         // ignore
       }
@@ -267,41 +265,91 @@ const AdminAppointments = ({ user }) => {
                 Busca una clienta para ver sus datos.
               </p>
             )}
-            {client && (
-              <div className="admin-appointments__reservations">
-                <h4 className="admin-appointments__subhead">Reservas</h4>
-                {clientReservations.length === 0 ? (
-                  <p className="admin-appointments__empty">Sin reservas</p>
-                ) : (
-                  <ul className="admin-appointments__list">
-                    {clientReservations.map((r) => (
-                      <li key={r._id} className="admin-appointments__row">
-                        <div className="admin-appointments__row-info">
-                          <span className="admin-appointments__service">
-                            {r.serviceName}
-                          </span>
-                          <span className="admin-appointments__date">
-                            {new Date(r.scheduledAt).toLocaleDateString()}
-                          </span>
-                          <span className="admin-appointments__status">
-                            {r.status}
-                          </span>
-                        </div>
-                        <button
-                          type="button"
-                          className="admin-appointments__delete"
-                          onClick={() => handleDeleteReservation(r._id)}
-                        >
-                          ❌ Eliminar
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            )}
           </article>
         </div>
+
+        <article className="admin-appointments__card admin-appointments__card--wide">
+          <h3 className="admin-appointments__card-title">Citas registradas</h3>
+          {client ? (
+            reservations.length === 0 ? (
+              <p className="admin-appointments__empty">
+                Este cliente aún no tiene citas registradas.
+              </p>
+            ) : (
+              <div className="admin-appointments__reservations-scroll">
+                <ul className="admin-appointments__list">
+                  {reservations.map((r) => {
+                    const dateLabel = new Date(r.date).toLocaleDateString(
+                      "es-MX",
+                      {
+                        day: "2-digit",
+                        month: "long",
+                        year: "numeric",
+                      },
+                    );
+                    const statusKey = String(r.status || "").toLowerCase();
+                    const statusMap = {
+                      completed: "COMPLETADA",
+                      confirmed: "CONFIRMADA",
+                      pending: "PENDIENTE",
+                      cancelled: "CANCELADA",
+                    };
+                    const statusLabel = statusMap[statusKey] || "SIN ESTADO";
+
+                    return (
+                      <li
+                        key={r._id}
+                        className="admin-appointments__reservation"
+                      >
+                        <div className="admin-appointments__reservation-main">
+                          <div className="admin-appointments__reservation-title">
+                            <span role="img" aria-label="servicio">
+                              🕯️
+                            </span>
+                            <span>{r.service}</span>
+                          </div>
+                          <div className="admin-appointments__reservation-date">
+                            <span role="img" aria-label="fecha">
+                              📅
+                            </span>
+                            <span>{dateLabel}</span>
+                          </div>
+                          {r.notes ? (
+                            <div className="admin-appointments__reservation-notes">
+                              <span role="img" aria-label="notas">
+                                📝
+                              </span>
+                              <span>{r.notes}</span>
+                            </div>
+                          ) : null}
+                        </div>
+
+                        <div className="admin-appointments__reservation-actions">
+                          <span
+                            className={`admin-appointments__badge admin-appointments__badge--${statusKey}`}
+                          >
+                            {statusLabel}
+                          </span>
+                          <button
+                            type="button"
+                            className="admin-appointments__delete"
+                            onClick={() => handleDeleteReservation(r._id)}
+                          >
+                            ❌ Eliminar
+                          </button>
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            )
+          ) : (
+            <p className="admin-appointments__empty">
+              Busca una clienta para ver sus citas.
+            </p>
+          )}
+        </article>
 
         <article className="admin-appointments__card admin-appointments__card--wide">
           <h3 className="admin-appointments__card-title">

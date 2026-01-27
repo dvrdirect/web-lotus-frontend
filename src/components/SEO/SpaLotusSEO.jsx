@@ -4,8 +4,8 @@ import { Helmet } from "react-helmet";
 const SpaLotusSEO = ({
   url = "https://www.spalotus.mx/",
   image = "https://www.spalotus.mx/assets/og.jpg",
-  lat = "19.000000",
-  lon = "-99.000000",
+  lat = "19.350000",
+  lon = "-99.050000",
   phone = "+52 1 55 7108 9120",
   streetAddress = "59 C. Nicolás Bravo Sur, 55030 Estado de México, México",
 }) => {

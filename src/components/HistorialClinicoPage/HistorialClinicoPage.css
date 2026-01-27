@@ -152,7 +152,10 @@
   cursor: pointer;
   font-size: 0.88rem;
   font-weight: 600;
-  transition: transform 0.16s ease, box-shadow 0.2s ease, background 0.2s ease;
+  transition:
+    transform 0.16s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
 }
 
 .clinical-button--primary {

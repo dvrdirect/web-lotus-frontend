@@ -193,7 +193,9 @@ function HistorialClinicoUser({ data, onSave }) {
             Alergias
             <textarea
               className="clinical-form__textarea"
-              value={isEditing ? draft.allergies : data?.medical?.allergies || ""}
+              value={
+                isEditing ? draft.allergies : data?.medical?.allergies || ""
+              }
               onChange={(e) =>
                 setDraft((prev) => ({ ...prev, allergies: e.target.value }))
               }
@@ -208,9 +210,7 @@ function HistorialClinicoUser({ data, onSave }) {
             <textarea
               className="clinical-form__textarea"
               value={
-                isEditing
-                  ? draft.medications
-                  : data?.medical?.medications || ""
+                isEditing ? draft.medications : data?.medical?.medications || ""
               }
               onChange={(e) =>
                 setDraft((prev) => ({ ...prev, medications: e.target.value }))
@@ -292,9 +292,10 @@ function HistorialClinicoUser({ data, onSave }) {
             <p className="clinical-form__group-title">Tratamientos favoritos</p>
             <div className="clinical-chip-grid">
               {TREATMENTS.map((t) => {
-                const selected = (isEditing
-                  ? draft.spaPreferences.favoriteTreatments
-                  : data?.spaPreferences?.favoriteTreatments) || [];
+                const selected =
+                  (isEditing
+                    ? draft.spaPreferences.favoriteTreatments
+                    : data?.spaPreferences?.favoriteTreatments) || [];
                 const isOn = selected.includes(t);
 
                 return (
@@ -331,9 +332,10 @@ function HistorialClinicoUser({ data, onSave }) {
             <p className="clinical-form__group-title">Aromas preferidos</p>
             <div className="clinical-chip-grid">
               {AROMAS.map((a) => {
-                const selected = (isEditing
-                  ? draft.spaPreferences.aromas
-                  : data?.spaPreferences?.aromas) || [];
+                const selected =
+                  (isEditing
+                    ? draft.spaPreferences.aromas
+                    : data?.spaPreferences?.aromas) || [];
                 const isOn = selected.includes(a);
 
                 return (
@@ -367,9 +369,10 @@ function HistorialClinicoUser({ data, onSave }) {
             <p className="clinical-form__group-title">Zonas sensibles</p>
             <div className="clinical-chip-grid">
               {SENSITIVE_ZONES.map((z) => {
-                const selected = (isEditing
-                  ? draft.spaPreferences.sensitiveZones
-                  : data?.spaPreferences?.sensitiveZones) || [];
+                const selected =
+                  (isEditing
+                    ? draft.spaPreferences.sensitiveZones
+                    : data?.spaPreferences?.sensitiveZones) || [];
                 const isOn = selected.includes(z);
 
                 return (
@@ -455,7 +458,10 @@ function HistorialClinicoUser({ data, onSave }) {
                 })
               : "";
             return (
-              <li key={t.id || `${t.name}-${t.date}`} className="clinical-entry">
+              <li
+                key={t.id || `${t.name}-${t.date}`}
+                className="clinical-entry"
+              >
                 <p className="clinical-entry__title">{t?.name || "—"}</p>
                 <p className="clinical-entry__meta">{formatted}</p>
               </li>

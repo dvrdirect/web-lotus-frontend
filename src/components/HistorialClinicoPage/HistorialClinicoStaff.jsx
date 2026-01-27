@@ -151,7 +151,10 @@ function HistorialClinicoStaff({ data, onSave, clientId }) {
   };
 
   return (
-    <section className="clinical-page__grid" aria-label="Historial clínico staff">
+    <section
+      className="clinical-page__grid"
+      aria-label="Historial clínico staff"
+    >
       <article className="clinical-card" aria-label="Cliente">
         <header className="clinical-card__header">
           <h2 className="clinical-card__title">Clienta</h2>
@@ -223,7 +226,9 @@ function HistorialClinicoStaff({ data, onSave, clientId }) {
             <select
               className="clinical-form__select"
               value={draft?.spaPreferences?.primaryGoal || "relajacion"}
-              onChange={(e) => updatePreferences({ primaryGoal: e.target.value })}
+              onChange={(e) =>
+                updatePreferences({ primaryGoal: e.target.value })
+              }
             >
               {GOALS.map((g) => (
                 <option key={g.value} value={g.value}>
@@ -256,9 +261,9 @@ function HistorialClinicoStaff({ data, onSave, clientId }) {
                   <input
                     type="checkbox"
                     checked={Boolean(
-                      (draft?.spaPreferences?.favoriteTreatments || []).includes(
-                        t,
-                      ),
+                      (
+                        draft?.spaPreferences?.favoriteTreatments || []
+                      ).includes(t),
                     )}
                     onChange={() =>
                       updatePreferences({
@@ -351,7 +356,9 @@ function HistorialClinicoStaff({ data, onSave, clientId }) {
             <textarea
               className="clinical-form__textarea"
               value={draft?.medical?.contraindications || ""}
-              onChange={(e) => updateMedical({ contraindications: e.target.value })}
+              onChange={(e) =>
+                updateMedical({ contraindications: e.target.value })
+              }
               rows={3}
               placeholder="Ej. evitar calor local, no drenaje profundo..."
             />
@@ -362,7 +369,9 @@ function HistorialClinicoStaff({ data, onSave, clientId }) {
             <textarea
               className="clinical-form__textarea"
               value={draft?.medical?.clinicalAlerts || ""}
-              onChange={(e) => updateMedical({ clinicalAlerts: e.target.value })}
+              onChange={(e) =>
+                updateMedical({ clinicalAlerts: e.target.value })
+              }
               rows={3}
               placeholder="Ej. presión baja, zona lumbar sensible, etc."
             />
@@ -373,7 +382,9 @@ function HistorialClinicoStaff({ data, onSave, clientId }) {
             <textarea
               className="clinical-form__textarea"
               value={draft?.medical?.adverseReactions || ""}
-              onChange={(e) => updateMedical({ adverseReactions: e.target.value })}
+              onChange={(e) =>
+                updateMedical({ adverseReactions: e.target.value })
+              }
               rows={3}
               placeholder="Ej. irritación por aroma, mareo post-sesión..."
             />

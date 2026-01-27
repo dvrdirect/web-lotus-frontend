@@ -13,6 +13,7 @@ import Register from "../Auth/Register";
 import { AuthProvider } from "../../context/AuthContext";
 import ScrollToTop from "./ScrollToTop";
 import { withProtectedRoute } from "../ProtectedRoute";
+import { withAdminRoute } from "../AdminRoute";
 import SpaLotusSEO from "../SEO/SpaLotusSEO";
 
 const ProfilePageProtected = withProtectedRoute(ProfilePage);
@@ -20,6 +21,7 @@ const ConsultationsPageProtected = withProtectedRoute(ConsultationsPage);
 const BookingPageProtected = withProtectedRoute(BookingPage);
 const SettingsPageProtected = withProtectedRoute(SettingsPage);
 const HistorialClinicoPageProtected = withProtectedRoute(HistorialClinicoPage);
+const HistorialClinicoPageAdmin = withAdminRoute(HistorialClinicoPage);
 
 function App() {
   return (
@@ -44,6 +46,10 @@ function App() {
           <Route
             path="/historial-clinico"
             element={<HistorialClinicoPageProtected />}
+          />
+          <Route
+            path="/admin/historial-clinico/:id"
+            element={<HistorialClinicoPageAdmin />}
           />
           <Route path="/reservar" element={<BookingPageProtected />} />
           <Route path="/nueva-reserva" element={<BookingPageProtected />} />

@@ -6,8 +6,8 @@ const SpaLotusSEO = ({
   image = "https://www.spalotus.mx/assets/og.jpg",
   lat = "19.000000",
   lon = "-99.000000",
-  phone = "+52 55 0000 0000",
-  streetAddress = "Nicolás Bravo, Estado de México",
+  phone = "+52 1 55 7108 9120",
+  streetAddress = "59 C. Nicolás Bravo Sur, 55030 Estado de México, México",
 }) => {
   const title =
     "Spa Lotus | Masajes relajantes y rituales de bienestar en Estado de México";

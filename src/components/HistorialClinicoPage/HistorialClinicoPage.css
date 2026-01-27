@@ -264,4 +264,12 @@
   .clinical-checkbox-grid {
     grid-template-columns: minmax(0, 1fr);
   }
+
+  .clinical-multi__row {
+    gap: 0.6rem;
+  }
+
+  .clinical-multi__label {
+    flex: 1 1 100%;
+  }
 }

@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { Save, Plus } from "lucide-react";
+import MultiSelectPicker from "./MultiSelectPicker";
 
 const CONDITIONS = [
   { key: "embarazo", label: "Embarazo" },
@@ -48,9 +49,6 @@ const toggleInList = (list, value) => {
   else set.add(value);
   return Array.from(set);
 };
-
-const getMultiSelectValues = (event) =>
-  Array.from(event.target.selectedOptions).map((opt) => opt.value);
 
 const formatDate = (value) => {
   if (!value) return "";
@@ -256,60 +254,30 @@ function HistorialClinicoStaff({ data, onSave, clientId }) {
             </select>
           </label>
 
-          <label className="clinical-form__label">
-            Tratamientos favoritos
-            <select
-              multiple
-              size={Math.min(5, FAVORITE_TREATMENTS.length)}
-              className="clinical-form__select clinical-form__select--multi"
-              value={draft?.spaPreferences?.favoriteTreatments || []}
-              onChange={(e) =>
-                updatePreferences({ favoriteTreatments: getMultiSelectValues(e) })
-              }
-            >
-              {FAVORITE_TREATMENTS.map((t) => (
-                <option key={t} value={t}>
-                  {t}
-                </option>
-              ))}
-            </select>
-          </label>
+          <MultiSelectPicker
+            label="Tratamientos favoritos"
+            options={FAVORITE_TREATMENTS}
+            value={draft?.spaPreferences?.favoriteTreatments || []}
+            onChange={(nextList) =>
+              updatePreferences({ favoriteTreatments: nextList })
+            }
+          />
 
-          <label className="clinical-form__label">
-            Aromas
-            <select
-              multiple
-              size={Math.min(5, AROMAS.length)}
-              className="clinical-form__select clinical-form__select--multi"
-              value={draft?.spaPreferences?.aromas || []}
-              onChange={(e) => updatePreferences({ aromas: getMultiSelectValues(e) })}
-            >
-              {AROMAS.map((a) => (
-                <option key={a} value={a}>
-                  {a}
-                </option>
-              ))}
-            </select>
-          </label>
+          <MultiSelectPicker
+            label="Aromas"
+            options={AROMAS}
+            value={draft?.spaPreferences?.aromas || []}
+            onChange={(nextList) => updatePreferences({ aromas: nextList })}
+          />
 
-          <label className="clinical-form__label">
-            Zonas sensibles
-            <select
-              multiple
-              size={Math.min(5, SENSITIVE_ZONES.length)}
-              className="clinical-form__select clinical-form__select--multi"
-              value={draft?.spaPreferences?.sensitiveZones || []}
-              onChange={(e) =>
-                updatePreferences({ sensitiveZones: getMultiSelectValues(e) })
-              }
-            >
-              {SENSITIVE_ZONES.map((z) => (
-                <option key={z} value={z}>
-                  {z}
-                </option>
-              ))}
-            </select>
-          </label>
+          <MultiSelectPicker
+            label="Zonas sensibles"
+            options={SENSITIVE_ZONES}
+            value={draft?.spaPreferences?.sensitiveZones || []}
+            onChange={(nextList) =>
+              updatePreferences({ sensitiveZones: nextList })
+            }
+          />
         </div>
       </article>
 

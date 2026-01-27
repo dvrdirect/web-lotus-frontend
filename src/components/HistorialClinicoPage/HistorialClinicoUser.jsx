@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { Save, Pencil, XCircle } from "lucide-react";
+import MultiSelectPicker from "./MultiSelectPicker";
 
 const CONDITIONS = [
   { key: "embarazo", label: "Embarazo" },
@@ -41,9 +42,6 @@ const SENSITIVE_ZONES = [
   "Rodillas",
   "Pies",
 ];
-
-const getMultiSelectValues = (event) =>
-  Array.from(event.target.selectedOptions).map((opt) => opt.value);
 
 function HistorialClinicoUser({ data, onSave }) {
   const [isEditing, setIsEditing] = useState(false);
@@ -284,113 +282,62 @@ function HistorialClinicoUser({ data, onSave }) {
             </select>
           </label>
 
-          <label className="clinical-form__label">
-            Tratamientos favoritos
-            <select
-              multiple
-              size={Math.min(5, TREATMENTS.length)}
-              className="clinical-form__select clinical-form__select--multi"
-              value={
-                (isEditing
-                  ? draft.spaPreferences.favoriteTreatments
-                  : data?.spaPreferences?.favoriteTreatments) || []
-              }
-              onChange={(e) => {
-                if (!isEditing) return;
-                const selected = getMultiSelectValues(e);
-                setDraft((prev) => ({
-                  ...prev,
-                  spaPreferences: {
-                    ...prev.spaPreferences,
-                    favoriteTreatments: selected,
-                  },
-                }));
-              }}
-              disabled={!isEditing}
-            >
-              {TREATMENTS.map((t) => (
-                <option key={t} value={t}>
-                  {t}
-                </option>
-              ))}
-            </select>
-            {isEditing ? (
-              <span className="clinical-hint">
-                Tip: puedes seleccionar varias opciones.
-              </span>
-            ) : null}
-          </label>
+          <MultiSelectPicker
+            label="Tratamientos favoritos"
+            options={TREATMENTS}
+            value={
+              (isEditing
+                ? draft.spaPreferences.favoriteTreatments
+                : data?.spaPreferences?.favoriteTreatments) || []
+            }
+            disabled={!isEditing}
+            onChange={(nextList) => {
+              setDraft((prev) => ({
+                ...prev,
+                spaPreferences: {
+                  ...prev.spaPreferences,
+                  favoriteTreatments: nextList,
+                },
+              }));
+            }}
+          />
 
-          <label className="clinical-form__label">
-            Aromas preferidos
-            <select
-              multiple
-              size={Math.min(5, AROMAS.length)}
-              className="clinical-form__select clinical-form__select--multi"
-              value={
-                (isEditing
-                  ? draft.spaPreferences.aromas
-                  : data?.spaPreferences?.aromas) || []
-              }
-              onChange={(e) => {
-                if (!isEditing) return;
-                const selected = getMultiSelectValues(e);
-                setDraft((prev) => ({
-                  ...prev,
-                  spaPreferences: { ...prev.spaPreferences, aromas: selected },
-                }));
-              }}
-              disabled={!isEditing}
-            >
-              {AROMAS.map((a) => (
-                <option key={a} value={a}>
-                  {a}
-                </option>
-              ))}
-            </select>
-            {isEditing ? (
-              <span className="clinical-hint">
-                Tip: puedes seleccionar varias opciones.
-              </span>
-            ) : null}
-          </label>
+          <MultiSelectPicker
+            label="Aromas preferidos"
+            options={AROMAS}
+            value={
+              (isEditing
+                ? draft.spaPreferences.aromas
+                : data?.spaPreferences?.aromas) || []
+            }
+            disabled={!isEditing}
+            onChange={(nextList) => {
+              setDraft((prev) => ({
+                ...prev,
+                spaPreferences: { ...prev.spaPreferences, aromas: nextList },
+              }));
+            }}
+          />
 
-          <label className="clinical-form__label">
-            Zonas sensibles
-            <select
-              multiple
-              size={Math.min(5, SENSITIVE_ZONES.length)}
-              className="clinical-form__select clinical-form__select--multi"
-              value={
-                (isEditing
-                  ? draft.spaPreferences.sensitiveZones
-                  : data?.spaPreferences?.sensitiveZones) || []
-              }
-              onChange={(e) => {
-                if (!isEditing) return;
-                const selected = getMultiSelectValues(e);
-                setDraft((prev) => ({
-                  ...prev,
-                  spaPreferences: {
-                    ...prev.spaPreferences,
-                    sensitiveZones: selected,
-                  },
-                }));
-              }}
-              disabled={!isEditing}
-            >
-              {SENSITIVE_ZONES.map((z) => (
-                <option key={z} value={z}>
-                  {z}
-                </option>
-              ))}
-            </select>
-            {isEditing ? (
-              <span className="clinical-hint">
-                Tip: puedes seleccionar varias opciones.
-              </span>
-            ) : null}
-          </label>
+          <MultiSelectPicker
+            label="Zonas sensibles"
+            options={SENSITIVE_ZONES}
+            value={
+              (isEditing
+                ? draft.spaPreferences.sensitiveZones
+                : data?.spaPreferences?.sensitiveZones) || []
+            }
+            disabled={!isEditing}
+            onChange={(nextList) => {
+              setDraft((prev) => ({
+                ...prev,
+                spaPreferences: {
+                  ...prev.spaPreferences,
+                  sensitiveZones: nextList,
+                },
+              }));
+            }}
+          />
         </div>
 
         {!isEditing && (

@@ -86,6 +86,15 @@
   outline: none;
 }
 
+.clinical-form__select--multi {
+  min-height: 150px;
+  padding: 0.35rem 0.7rem;
+}
+
+.clinical-form__select--multi option {
+  padding: 0.2rem 0;
+}
+
 .clinical-form__textarea {
   resize: vertical;
 }

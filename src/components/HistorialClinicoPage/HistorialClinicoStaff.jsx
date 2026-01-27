@@ -49,6 +49,9 @@ const toggleInList = (list, value) => {
   return Array.from(set);
 };
 
+const getMultiSelectValues = (event) =>
+  Array.from(event.target.selectedOptions).map((opt) => opt.value);
+
 const formatDate = (value) => {
   if (!value) return "";
   const d = new Date(value);
@@ -253,79 +256,60 @@ function HistorialClinicoStaff({ data, onSave, clientId }) {
             </select>
           </label>
 
-          <div className="clinical-form__group">
-            <p className="clinical-form__group-title">Tratamientos favoritos</p>
-            <div className="clinical-checkbox-grid">
+          <label className="clinical-form__label">
+            Tratamientos favoritos
+            <select
+              multiple
+              size={Math.min(5, FAVORITE_TREATMENTS.length)}
+              className="clinical-form__select clinical-form__select--multi"
+              value={draft?.spaPreferences?.favoriteTreatments || []}
+              onChange={(e) =>
+                updatePreferences({ favoriteTreatments: getMultiSelectValues(e) })
+              }
+            >
               {FAVORITE_TREATMENTS.map((t) => (
-                <label key={t} className="clinical-check">
-                  <input
-                    type="checkbox"
-                    checked={Boolean(
-                      (
-                        draft?.spaPreferences?.favoriteTreatments || []
-                      ).includes(t),
-                    )}
-                    onChange={() =>
-                      updatePreferences({
-                        favoriteTreatments: toggleInList(
-                          draft?.spaPreferences?.favoriteTreatments,
-                          t,
-                        ),
-                      })
-                    }
-                  />
-                  <span>{t}</span>
-                </label>
+                <option key={t} value={t}>
+                  {t}
+                </option>
               ))}
-            </div>
-          </div>
+            </select>
+          </label>
 
-          <div className="clinical-form__group">
-            <p className="clinical-form__group-title">Aromas</p>
-            <div className="clinical-checkbox-grid">
+          <label className="clinical-form__label">
+            Aromas
+            <select
+              multiple
+              size={Math.min(5, AROMAS.length)}
+              className="clinical-form__select clinical-form__select--multi"
+              value={draft?.spaPreferences?.aromas || []}
+              onChange={(e) => updatePreferences({ aromas: getMultiSelectValues(e) })}
+            >
               {AROMAS.map((a) => (
-                <label key={a} className="clinical-check">
-                  <input
-                    type="checkbox"
-                    checked={Boolean(
-                      (draft?.spaPreferences?.aromas || []).includes(a),
-                    )}
-                    onChange={() =>
-                      updatePreferences({
-                        aromas: toggleInList(draft?.spaPreferences?.aromas, a),
-                      })
-                    }
-                  />
-                  <span>{a}</span>
-                </label>
+                <option key={a} value={a}>
+                  {a}
+                </option>
               ))}
-            </div>
-          </div>
+            </select>
+          </label>
 
-          <div className="clinical-form__group">
-            <p className="clinical-form__group-title">Zonas sensibles</p>
-            <div className="clinical-checkbox-grid">
+          <label className="clinical-form__label">
+            Zonas sensibles
+            <select
+              multiple
+              size={Math.min(5, SENSITIVE_ZONES.length)}
+              className="clinical-form__select clinical-form__select--multi"
+              value={draft?.spaPreferences?.sensitiveZones || []}
+              onChange={(e) =>
+                updatePreferences({ sensitiveZones: getMultiSelectValues(e) })
+              }
+            >
               {SENSITIVE_ZONES.map((z) => (
-                <label key={z} className="clinical-check">
-                  <input
-                    type="checkbox"
-                    checked={Boolean(
-                      (draft?.spaPreferences?.sensitiveZones || []).includes(z),
-                    )}
-                    onChange={() =>
-                      updatePreferences({
-                        sensitiveZones: toggleInList(
-                          draft?.spaPreferences?.sensitiveZones,
-                          z,
-                        ),
-                      })
-                    }
-                  />
-                  <span>{z}</span>
-                </label>
+                <option key={z} value={z}>
+                  {z}
+                </option>
               ))}
-            </div>
-          </div>
+            </select>
+          </label>
         </div>
       </article>
 

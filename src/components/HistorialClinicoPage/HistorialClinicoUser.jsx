@@ -42,12 +42,8 @@ const SENSITIVE_ZONES = [
   "Pies",
 ];
 
-const toggleInList = (list, value) => {
-  const set = new Set(list || []);
-  if (set.has(value)) set.delete(value);
-  else set.add(value);
-  return Array.from(set);
-};
+const getMultiSelectValues = (event) =>
+  Array.from(event.target.selectedOptions).map((opt) => opt.value);
 
 function HistorialClinicoUser({ data, onSave }) {
   const [isEditing, setIsEditing] = useState(false);
@@ -288,122 +284,113 @@ function HistorialClinicoUser({ data, onSave }) {
             </select>
           </label>
 
-          <div className="clinical-form__group">
-            <p className="clinical-form__group-title">Tratamientos favoritos</p>
-            <div className="clinical-chip-grid">
-              {TREATMENTS.map((t) => {
-                const selected =
-                  (isEditing
-                    ? draft.spaPreferences.favoriteTreatments
-                    : data?.spaPreferences?.favoriteTreatments) || [];
-                const isOn = selected.includes(t);
+          <label className="clinical-form__label">
+            Tratamientos favoritos
+            <select
+              multiple
+              size={Math.min(5, TREATMENTS.length)}
+              className="clinical-form__select clinical-form__select--multi"
+              value={
+                (isEditing
+                  ? draft.spaPreferences.favoriteTreatments
+                  : data?.spaPreferences?.favoriteTreatments) || []
+              }
+              onChange={(e) => {
+                if (!isEditing) return;
+                const selected = getMultiSelectValues(e);
+                setDraft((prev) => ({
+                  ...prev,
+                  spaPreferences: {
+                    ...prev.spaPreferences,
+                    favoriteTreatments: selected,
+                  },
+                }));
+              }}
+              disabled={!isEditing}
+            >
+              {TREATMENTS.map((t) => (
+                <option key={t} value={t}>
+                  {t}
+                </option>
+              ))}
+            </select>
+            {isEditing ? (
+              <span className="clinical-hint">
+                Tip: puedes seleccionar varias opciones.
+              </span>
+            ) : null}
+          </label>
 
-                return (
-                  <button
-                    key={t}
-                    type="button"
-                    className={
-                      "clinical-chip" + (isOn ? " clinical-chip--on" : "")
-                    }
-                    onClick={() => {
-                      if (!isEditing) return;
-                      setDraft((prev) => ({
-                        ...prev,
-                        spaPreferences: {
-                          ...prev.spaPreferences,
-                          favoriteTreatments: toggleInList(
-                            prev.spaPreferences.favoriteTreatments,
-                            t,
-                          ),
-                        },
-                      }));
-                    }}
-                    aria-pressed={isOn}
-                    disabled={!isEditing}
-                  >
-                    {t}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
+          <label className="clinical-form__label">
+            Aromas preferidos
+            <select
+              multiple
+              size={Math.min(5, AROMAS.length)}
+              className="clinical-form__select clinical-form__select--multi"
+              value={
+                (isEditing
+                  ? draft.spaPreferences.aromas
+                  : data?.spaPreferences?.aromas) || []
+              }
+              onChange={(e) => {
+                if (!isEditing) return;
+                const selected = getMultiSelectValues(e);
+                setDraft((prev) => ({
+                  ...prev,
+                  spaPreferences: { ...prev.spaPreferences, aromas: selected },
+                }));
+              }}
+              disabled={!isEditing}
+            >
+              {AROMAS.map((a) => (
+                <option key={a} value={a}>
+                  {a}
+                </option>
+              ))}
+            </select>
+            {isEditing ? (
+              <span className="clinical-hint">
+                Tip: puedes seleccionar varias opciones.
+              </span>
+            ) : null}
+          </label>
 
-          <div className="clinical-form__group">
-            <p className="clinical-form__group-title">Aromas preferidos</p>
-            <div className="clinical-chip-grid">
-              {AROMAS.map((a) => {
-                const selected =
-                  (isEditing
-                    ? draft.spaPreferences.aromas
-                    : data?.spaPreferences?.aromas) || [];
-                const isOn = selected.includes(a);
-
-                return (
-                  <button
-                    key={a}
-                    type="button"
-                    className={
-                      "clinical-chip" + (isOn ? " clinical-chip--on" : "")
-                    }
-                    onClick={() => {
-                      if (!isEditing) return;
-                      setDraft((prev) => ({
-                        ...prev,
-                        spaPreferences: {
-                          ...prev.spaPreferences,
-                          aromas: toggleInList(prev.spaPreferences.aromas, a),
-                        },
-                      }));
-                    }}
-                    aria-pressed={isOn}
-                    disabled={!isEditing}
-                  >
-                    {a}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          <div className="clinical-form__group">
-            <p className="clinical-form__group-title">Zonas sensibles</p>
-            <div className="clinical-chip-grid">
-              {SENSITIVE_ZONES.map((z) => {
-                const selected =
-                  (isEditing
-                    ? draft.spaPreferences.sensitiveZones
-                    : data?.spaPreferences?.sensitiveZones) || [];
-                const isOn = selected.includes(z);
-
-                return (
-                  <button
-                    key={z}
-                    type="button"
-                    className={
-                      "clinical-chip" + (isOn ? " clinical-chip--on" : "")
-                    }
-                    onClick={() => {
-                      if (!isEditing) return;
-                      setDraft((prev) => ({
-                        ...prev,
-                        spaPreferences: {
-                          ...prev.spaPreferences,
-                          sensitiveZones: toggleInList(
-                            prev.spaPreferences.sensitiveZones,
-                            z,
-                          ),
-                        },
-                      }));
-                    }}
-                    aria-pressed={isOn}
-                    disabled={!isEditing}
-                  >
-                    {z}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
+          <label className="clinical-form__label">
+            Zonas sensibles
+            <select
+              multiple
+              size={Math.min(5, SENSITIVE_ZONES.length)}
+              className="clinical-form__select clinical-form__select--multi"
+              value={
+                (isEditing
+                  ? draft.spaPreferences.sensitiveZones
+                  : data?.spaPreferences?.sensitiveZones) || []
+              }
+              onChange={(e) => {
+                if (!isEditing) return;
+                const selected = getMultiSelectValues(e);
+                setDraft((prev) => ({
+                  ...prev,
+                  spaPreferences: {
+                    ...prev.spaPreferences,
+                    sensitiveZones: selected,
+                  },
+                }));
+              }}
+              disabled={!isEditing}
+            >
+              {SENSITIVE_ZONES.map((z) => (
+                <option key={z} value={z}>
+                  {z}
+                </option>
+              ))}
+            </select>
+            {isEditing ? (
+              <span className="clinical-hint">
+                Tip: puedes seleccionar varias opciones.
+              </span>
+            ) : null}
+          </label>
         </div>
 
         {!isEditing && (

@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import {
   User,
+  FileText,
   Clock3,
   CalendarPlus,
   Settings,
@@ -11,7 +12,7 @@ import {
 import { useAuth } from "../../../context/AuthContext";
 
 const UserDropdown = () => {
-  const { userData, logout } = useAuth();
+  const { userData, logout, isLoggedIn } = useAuth();
   const [open, setOpen] = useState(false);
   const containerRef = useRef(null);
   const navigate = useNavigate();
@@ -122,6 +123,27 @@ const UserDropdown = () => {
             </span>
             <span className="user-dropdown__item-label">Mis Consultas</span>
           </button>
+
+          {isLoggedIn && (
+            <button
+              type="button"
+              className={
+                "user-dropdown__item" +
+                (currentPath === "/historial-clinico"
+                  ? " user-dropdown__item--active"
+                  : "")
+              }
+              role="menuitem"
+              onClick={() => handleNavigate("/historial-clinico")}
+            >
+              <span className="user-dropdown__item-icon" aria-hidden="true">
+                <FileText size={16} />
+              </span>
+              <span className="user-dropdown__item-label">
+                Historial Clínico
+              </span>
+            </button>
+          )}
 
           <button
             type="button"

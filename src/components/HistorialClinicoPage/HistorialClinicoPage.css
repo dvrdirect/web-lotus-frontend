@@ -1,0 +1,49 @@
+@import "../ProfilePage/ProfilePage.css";
+
+.clinical-history__placeholder {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+  padding: 0.95rem 1rem;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(185, 124, 139, 0.16);
+  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.06);
+}
+
+.clinical-history__icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: rgba(185, 124, 139, 0.12);
+  color: #b97c8b;
+  flex: 0 0 auto;
+}
+
+.clinical-history__content {
+  flex: 1 1 auto;
+}
+
+.clinical-history__title {
+  margin: 0;
+  font-weight: 700;
+  color: #25323d;
+}
+
+.clinical-history__text {
+  margin: 0.25rem 0 0;
+  color: #6b7280;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.clinical-history__privacy {
+  margin: 0.7rem 0 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.82rem;
+  color: #6b7280;
+}

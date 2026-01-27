@@ -7,6 +7,7 @@ import ProfilePage from "../ProfilePage/ProfilePage";
 import ConsultationsPage from "../ConsultationsPage/ConsultationsPage";
 import BookingPage from "../BookingPage/BookingPage";
 import SettingsPage from "../SettingsPage/SettingsPage";
+import HistorialClinicoPage from "../HistorialClinicoPage/HistorialClinicoPage";
 import Login from "../Auth/Login";
 import Register from "../Auth/Register";
 import { AuthProvider } from "../../context/AuthContext";
@@ -18,6 +19,7 @@ const ProfilePageProtected = withProtectedRoute(ProfilePage);
 const ConsultationsPageProtected = withProtectedRoute(ConsultationsPage);
 const BookingPageProtected = withProtectedRoute(BookingPage);
 const SettingsPageProtected = withProtectedRoute(SettingsPage);
+const HistorialClinicoPageProtected = withProtectedRoute(HistorialClinicoPage);
 
 function App() {
   return (
@@ -38,6 +40,10 @@ function App() {
           <Route
             path="/mis-consultas"
             element={<ConsultationsPageProtected />}
+          />
+          <Route
+            path="/historial-clinico"
+            element={<HistorialClinicoPageProtected />}
           />
           <Route path="/reservar" element={<BookingPageProtected />} />
           <Route path="/nueva-reserva" element={<BookingPageProtected />} />

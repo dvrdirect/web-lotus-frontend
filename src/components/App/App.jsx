@@ -12,6 +12,7 @@ import Register from "../Auth/Register";
 import { AuthProvider } from "../../context/AuthContext";
 import ScrollToTop from "./ScrollToTop";
 import { withProtectedRoute } from "../ProtectedRoute";
+import SpaLotusSEO from "../SEO/SpaLotusSEO";
 
 const ProfilePageProtected = withProtectedRoute(ProfilePage);
 const ConsultationsPageProtected = withProtectedRoute(ConsultationsPage);
@@ -22,6 +23,7 @@ function App() {
   return (
     <AuthProvider>
       <Router>
+        <SpaLotusSEO />
         {/* Siempre que cambie la ruta, volvemos al inicio de la página */}
         <ScrollToTop />
         <Routes>

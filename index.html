@@ -16,12 +16,15 @@
     <script>
       (function () {
         try {
-          const hostname = location.hostname || '';
-          const isLocal = hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '';
+          const hostname = location.hostname || "";
+          const isLocal =
+            hostname === "localhost" ||
+            hostname === "127.0.0.1" ||
+            hostname === "";
           const params = new URLSearchParams(location.search);
-          if (isLocal && params.get('devAuth') !== 'off') {
-            const s = document.createElement('script');
-            s.src = '/dev-auth.js';
+          if (isLocal && params.get("devAuth") !== "off") {
+            const s = document.createElement("script");
+            s.src = "/dev-auth.js";
             s.defer = true;
             document.head.appendChild(s);
           }

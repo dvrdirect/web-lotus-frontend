@@ -204,6 +204,12 @@
   margin-top: 1rem;
 }
 
+.clinical-preferences__footer {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
 .clinical-inline-form {
   display: flex;
   align-items: flex-end;

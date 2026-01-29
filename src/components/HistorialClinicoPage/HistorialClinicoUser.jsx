@@ -341,14 +341,16 @@ function HistorialClinicoUser({ data, onSave }) {
         </div>
 
         {!isEditing && (
-          <button
-            type="button"
-            className="clinical-button clinical-button--outline"
-            onClick={startEdit}
-          >
-            <Pencil size={16} />
-            Editar preferencias
-          </button>
+          <div className="clinical-preferences__footer">
+            <button
+              type="button"
+              className="clinical-button clinical-button--outline"
+              onClick={startEdit}
+            >
+              <Pencil size={16} />
+              Editar preferencias
+            </button>
+          </div>
         )}
 
         {isEditing && (

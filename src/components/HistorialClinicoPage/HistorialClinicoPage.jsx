@@ -25,30 +25,63 @@ function HistorialClinicoPage() {
   const clientId = params?.id;
 
   const [data, setData] = useState(null);
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (isStaffView) {
-      setData(getClientClinicalHistory({ id: clientId }));
-      return;
+    let cancelled = false;
+
+    const run = async () => {
+      setIsLoading(true);
+      setError("");
+      try {
+        if (isStaffView) {
+          const result = await getClientClinicalHistory({ id: clientId });
+          if (!cancelled) setData(result);
+          return;
+        }
+
+        const clinicalHistory = await getMyClinicalHistory();
+        if (!cancelled) setData({ clinicalHistory });
+      } catch (e) {
+        if (!cancelled) {
+          setError(
+            e?.message ||
+              "No se pudo cargar el historial clínico. Intenta de nuevo.",
+          );
+          setData(null);
+        }
+      } finally {
+        if (!cancelled) setIsLoading(false);
+      }
+    };
+
+    run();
+    return () => {
+      cancelled = true;
+    };
+  }, [isStaffView, clientId]);
+
+  const handleSave = async (patch) => {
+    setError("");
+    try {
+      if (isStaffView) {
+        const saved = await saveClientClinicalHistory({ id: clientId }, patch);
+        setData(saved);
+        return;
+      }
+
+      const saved = await saveMyClinicalHistory(
+        { email: userData?.email },
+        patch,
+      );
+      setData({ clinicalHistory: saved });
+    } catch (e) {
+      setError(
+        e?.message ||
+          "No se pudo guardar el historial clínico. Intenta de nuevo.",
+      );
     }
-
-    setData(
-      getMyClinicalHistory({
-        name: userData?.name || "",
-        email: userData?.email || "",
-      }),
-    );
-  }, [isStaffView, clientId, userData?.email, userData?.name]);
-
-  const handleSave = (next) => {
-    if (isStaffView) {
-      const saved = saveClientClinicalHistory({ id: clientId }, next);
-      setData(saved);
-      return;
-    }
-
-    const saved = saveMyClinicalHistory({ email: userData?.email }, next);
-    setData(saved);
   };
 
   const staffAccessDenied = isStaffView && role !== "admin";
@@ -80,7 +113,16 @@ function HistorialClinicoPage() {
           </section>
         ) : null}
 
-        {!staffAccessDenied && data ? (
+        {!staffAccessDenied && error ? (
+          <section className="account-page__card" aria-label="Error">
+            <div className="account-page__card-header">
+              <h2 className="account-page__card-title">No disponible</h2>
+              <p className="account-page__card-caption">{error}</p>
+            </div>
+          </section>
+        ) : null}
+
+        {!staffAccessDenied && !error && data ? (
           isStaffView ? (
             <section className="account-page__card" aria-label="Vista staff">
               <div className="account-page__card-header">
@@ -106,12 +148,18 @@ function HistorialClinicoPage() {
                 </p>
               </div>
 
-              <HistorialClinicoUser data={data} onSave={handleSave} />
+              <HistorialClinicoUser
+                data={data?.clinicalHistory}
+                onSave={handleSave}
+                profile={userData}
+              />
             </section>
           )
-        ) : !staffAccessDenied ? (
+        ) : !staffAccessDenied && !error ? (
           <section className="account-page__card" aria-label="Cargando">
-            <p className="account-page__placeholder-text">Cargando...</p>
+            <p className="account-page__placeholder-text">
+              {isLoading ? "Cargando..." : "—"}
+            </p>
           </section>
         ) : null}
       </main>

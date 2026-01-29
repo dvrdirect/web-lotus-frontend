@@ -68,9 +68,8 @@ export const AuthProvider = ({ children }) => {
     try {
       await mainApi.register({ name, email, password });
       // tras el registro, iniciamos sesión directamente
-      const { token } = await mainApi.login({ email, password });
-      const user = { name, email };
-      persistSession({ user, token });
+      const { token, user } = await mainApi.login({ email, password });
+      persistSession({ user: user || { name, email }, token });
       return { success: true };
     } catch (error) {
       console.error("Error en signup", error);
@@ -80,10 +79,12 @@ export const AuthProvider = ({ children }) => {
 
   const signin = async ({ email, password }) => {
     try {
-      const { token } = await mainApi.login({ email, password });
+      const { token, user } = await mainApi.login({ email, password });
       const nameFromEmail = email.split("@")[0] || "Invitado";
-      const user = { email, name: nameFromEmail };
-      persistSession({ user, token });
+      persistSession({
+        user: user || { email, name: nameFromEmail },
+        token,
+      });
       return { success: true };
     } catch (error) {
       console.error("Error en signin", error);

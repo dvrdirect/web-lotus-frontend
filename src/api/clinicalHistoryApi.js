@@ -1,77 +1,94 @@
-const safeJsonParse = (raw) => {
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "/api";
+
+function getAuthToken() {
+  if (typeof window === "undefined") return null;
   try {
-    return raw ? JSON.parse(raw) : null;
+    const stored = window.localStorage.getItem("lotus_auth");
+    if (!stored) return null;
+    const parsed = JSON.parse(stored);
+    return parsed?.token || null;
   } catch {
     return null;
   }
-};
+}
 
-const safeJsonStringify = (value) => {
-  try {
-    return JSON.stringify(value);
-  } catch {
-    return "";
+async function authFetch(path, options = {}) {
+  const token = getAuthToken();
+  if (!token) {
+    const error = new Error(
+      "No hay token de autenticación. Inicia sesión para continuar.",
+    );
+    error.status = 401;
+    throw error;
   }
-};
 
-const createDefaultClinicalHistory = ({ name, email, age }) => {
-  const now = new Date();
+  if (token === "dev-token") {
+    const error = new Error(
+      "Tu sesión es de desarrollo (dev-token) y no es válida para el backend. Inicia sesión real o usa ?devAuth=off.",
+    );
+    error.status = 401;
+    throw error;
+  }
 
-  return {
-    profile: {
-      name: name || "",
-      email: email || "",
-      age: typeof age === "number" ? age : null,
-    },
-    medical: {
-      conditions: {
-        embarazo: false,
-        hipertension: false,
-        diabetes: false,
-        problemasCardiacos: false,
-        lesionesRecientes: false,
-        varices: false,
-        migraña: false,
-      },
-      allergies: "",
-      medications: "",
-      contraindications: "",
-      clinicalAlerts: "",
-      adverseReactions: "",
-      followUpNotes: "",
-    },
+  const headers = {
+    ...(options.headers || {}),
+    Authorization: `Bearer ${token}`,
+  };
+
+  const response = await fetch(`${API_BASE}${path}`, {
+    ...options,
+    headers,
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text().catch(() => "");
+    const error = new Error(errorText || "La solicitud no se pudo completar.");
+    error.status = response.status;
+    throw error;
+  }
+
+  return response.json();
+}
+
+const emptyClinicalHistory = () => ({
+  userEditable: {
+    allergies: "",
+    currentMedications: "",
     spaPreferences: {
-      primaryGoal: "relajacion",
-      favoriteTreatments: [],
+      goal: "relajacion",
       pressure: "media",
-      aromas: [],
+      favoriteTreatments: [],
+      preferredAromas: [],
       sensitiveZones: [],
     },
-    treatmentsHistory: [
-      {
-        id: "treat-1",
-        name: "Masaje relajante",
-        date: now.toISOString(),
-        therapistNotes: "",
+  },
+  updatedAt: null,
+});
+
+const coerceUserEditableBody = (data) => {
+  if (!data || typeof data !== "object") return { userEditable: {} };
+  if (data.userEditable && typeof data.userEditable === "object") {
+    return { userEditable: data.userEditable };
+  }
+
+  // Backwards-compat: accept legacy UI shape
+  const allergies = data?.medical?.allergies;
+  const medications = data?.medical?.medications;
+  const spa = data?.spaPreferences || {};
+
+  return {
+    userEditable: {
+      allergies,
+      currentMedications: medications,
+      spaPreferences: {
+        goal: spa?.primaryGoal,
+        pressure: spa?.pressure,
+        favoriteTreatments: spa?.favoriteTreatments,
+        preferredAromas: spa?.aromas,
+        sensitiveZones: spa?.sensitiveZones,
       },
-    ],
-    internal: {
-      sessionObservations: [],
-    },
-    meta: {
-      updatedAt: now.toISOString(),
     },
   };
-};
-
-const readKey = (key, fallback) => {
-  const raw = window.localStorage.getItem(key);
-  const parsed = safeJsonParse(raw);
-  return parsed || fallback;
-};
-
-const writeKey = (key, value) => {
-  window.localStorage.setItem(key, safeJsonStringify(value));
 };
 
 export const clinicalKeyForCurrentUser = (email) =>
@@ -80,43 +97,47 @@ export const clinicalKeyForCurrentUser = (email) =>
 export const clinicalKeyForClientId = (id) =>
   `clinicalHistory:client:${String(id || "unknown")}`;
 
-export const getMyClinicalHistory = ({ name, email }) => {
-  const key = clinicalKeyForCurrentUser(email);
-  const fallback = createDefaultClinicalHistory({ name, email });
-  return readKey(key, fallback);
+// GET /api/users/clinical-history
+export const getMyClinicalHistory = async () => {
+  const data = await authFetch("/users/clinical-history", { method: "GET" });
+  return data?.clinicalHistory || emptyClinicalHistory();
 };
 
-export const saveMyClinicalHistory = ({ email }, data) => {
-  const key = clinicalKeyForCurrentUser(email);
-  const next = {
-    ...data,
-    meta: {
-      ...(data?.meta || {}),
-      updatedAt: new Date().toISOString(),
-    },
-  };
-  writeKey(key, next);
-  return next;
-};
-
-export const getClientClinicalHistory = ({ id }) => {
-  const key = clinicalKeyForClientId(id);
-  const fallback = createDefaultClinicalHistory({
-    name: `Clienta ${id}`,
-    email: "",
+// PUT /api/users/clinical-history
+export const saveMyClinicalHistory = async (_user, patch) => {
+  const body = coerceUserEditableBody(patch);
+  const data = await authFetch("/users/clinical-history", {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
   });
-  return readKey(key, fallback);
+  return data?.clinicalHistory || emptyClinicalHistory();
 };
 
-export const saveClientClinicalHistory = ({ id }, data) => {
-  const key = clinicalKeyForClientId(id);
-  const next = {
-    ...data,
-    meta: {
-      ...(data?.meta || {}),
-      updatedAt: new Date().toISOString(),
-    },
+// GET /api/admin/users/:id/clinical-history
+export const getClientClinicalHistory = async ({ id }) => {
+  const data = await authFetch(`/admin/users/${id}/clinical-history`, {
+    method: "GET",
+  });
+  return {
+    user: data?.user || { id, name: "", email: "" },
+    clinicalHistory: data?.clinicalHistory || emptyClinicalHistory(),
   };
-  writeKey(key, next);
-  return next;
+};
+
+// PUT /api/admin/users/:id/clinical-history
+export const saveClientClinicalHistory = async ({ id }, patch) => {
+  const src = patch && typeof patch === "object" ? patch : {};
+  const body = {
+    ...(src.userEditable ? { userEditable: src.userEditable } : {}),
+    ...(src.staffOnly ? { staffOnly: src.staffOnly } : {}),
+  };
+
+  await authFetch(`/admin/users/${id}/clinical-history`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+
+  return getClientClinicalHistory({ id });
 };

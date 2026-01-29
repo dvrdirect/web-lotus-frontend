@@ -43,19 +43,22 @@ const SENSITIVE_ZONES = [
   "Pies",
 ];
 
-function HistorialClinicoUser({ data, onSave }) {
+function HistorialClinicoUser({ data, onSave, profile }) {
   const [isEditing, setIsEditing] = useState(false);
 
   const initialDraft = useMemo(
     () => ({
-      allergies: data?.medical?.allergies || "",
-      medications: data?.medical?.medications || "",
+      allergies: data?.userEditable?.allergies || "",
+      currentMedications: data?.userEditable?.currentMedications || "",
       spaPreferences: {
-        primaryGoal: data?.spaPreferences?.primaryGoal || "relajacion",
-        favoriteTreatments: data?.spaPreferences?.favoriteTreatments || [],
-        pressure: data?.spaPreferences?.pressure || "media",
-        aromas: data?.spaPreferences?.aromas || [],
-        sensitiveZones: data?.spaPreferences?.sensitiveZones || [],
+        goal: data?.userEditable?.spaPreferences?.goal || "relajacion",
+        favoriteTreatments:
+          data?.userEditable?.spaPreferences?.favoriteTreatments || [],
+        pressure: data?.userEditable?.spaPreferences?.pressure || "media",
+        preferredAromas:
+          data?.userEditable?.spaPreferences?.preferredAromas || [],
+        sensitiveZones:
+          data?.userEditable?.spaPreferences?.sensitiveZones || [],
       },
     }),
     [data],
@@ -74,25 +77,24 @@ function HistorialClinicoUser({ data, onSave }) {
   };
 
   const handleSave = () => {
-    const next = {
-      ...data,
-      medical: {
-        ...(data?.medical || {}),
+    onSave?.({
+      userEditable: {
         allergies: draft.allergies,
-        medications: draft.medications,
+        currentMedications: draft.currentMedications,
+        spaPreferences: {
+          goal: draft.spaPreferences.goal,
+          pressure: draft.spaPreferences.pressure,
+          favoriteTreatments: draft.spaPreferences.favoriteTreatments,
+          preferredAromas: draft.spaPreferences.preferredAromas,
+          sensitiveZones: draft.spaPreferences.sensitiveZones,
+        },
       },
-      spaPreferences: {
-        ...(data?.spaPreferences || {}),
-        ...draft.spaPreferences,
-      },
-    };
-
-    onSave?.(next);
+    });
     setIsEditing(false);
   };
 
-  const profileName = data?.profile?.name || "";
-  const age = data?.profile?.age;
+  const profileName = profile?.name || profile?.email || "";
+  const age = null;
 
   return (
     <section className="clinical-page__grid" aria-label="Historial clínico">
@@ -188,7 +190,9 @@ function HistorialClinicoUser({ data, onSave }) {
             <textarea
               className="clinical-form__textarea"
               value={
-                isEditing ? draft.allergies : data?.medical?.allergies || ""
+                isEditing
+                  ? draft.allergies
+                  : data?.userEditable?.allergies || ""
               }
               onChange={(e) =>
                 setDraft((prev) => ({ ...prev, allergies: e.target.value }))
@@ -204,10 +208,15 @@ function HistorialClinicoUser({ data, onSave }) {
             <textarea
               className="clinical-form__textarea"
               value={
-                isEditing ? draft.medications : data?.medical?.medications || ""
+                isEditing
+                  ? draft.currentMedications
+                  : data?.userEditable?.currentMedications || ""
               }
               onChange={(e) =>
-                setDraft((prev) => ({ ...prev, medications: e.target.value }))
+                setDraft((prev) => ({
+                  ...prev,
+                  currentMedications: e.target.value,
+                }))
               }
               placeholder="Ej. antiinflamatorios, anticoagulantes, etc."
               disabled={!isEditing}
@@ -232,15 +241,15 @@ function HistorialClinicoUser({ data, onSave }) {
               className="clinical-form__select"
               value={
                 (isEditing
-                  ? draft.spaPreferences.primaryGoal
-                  : data?.spaPreferences?.primaryGoal) || "relajacion"
+                  ? draft.spaPreferences.goal
+                  : data?.userEditable?.spaPreferences?.goal) || "relajacion"
               }
               onChange={(e) =>
                 setDraft((prev) => ({
                   ...prev,
                   spaPreferences: {
                     ...prev.spaPreferences,
-                    primaryGoal: e.target.value,
+                    goal: e.target.value,
                   },
                 }))
               }
@@ -261,7 +270,7 @@ function HistorialClinicoUser({ data, onSave }) {
               value={
                 (isEditing
                   ? draft.spaPreferences.pressure
-                  : data?.spaPreferences?.pressure) || "media"
+                  : data?.userEditable?.spaPreferences?.pressure) || "media"
               }
               onChange={(e) =>
                 setDraft((prev) => ({
@@ -288,7 +297,7 @@ function HistorialClinicoUser({ data, onSave }) {
             value={
               (isEditing
                 ? draft.spaPreferences.favoriteTreatments
-                : data?.spaPreferences?.favoriteTreatments) || []
+                : data?.userEditable?.spaPreferences?.favoriteTreatments) || []
             }
             disabled={!isEditing}
             onChange={(nextList) => {
@@ -307,14 +316,17 @@ function HistorialClinicoUser({ data, onSave }) {
             options={AROMAS}
             value={
               (isEditing
-                ? draft.spaPreferences.aromas
-                : data?.spaPreferences?.aromas) || []
+                ? draft.spaPreferences.preferredAromas
+                : data?.userEditable?.spaPreferences?.preferredAromas) || []
             }
             disabled={!isEditing}
             onChange={(nextList) => {
               setDraft((prev) => ({
                 ...prev,
-                spaPreferences: { ...prev.spaPreferences, aromas: nextList },
+                spaPreferences: {
+                  ...prev.spaPreferences,
+                  preferredAromas: nextList,
+                },
               }));
             }}
           />
@@ -325,7 +337,7 @@ function HistorialClinicoUser({ data, onSave }) {
             value={
               (isEditing
                 ? draft.spaPreferences.sensitiveZones
-                : data?.spaPreferences?.sensitiveZones) || []
+                : data?.userEditable?.spaPreferences?.sensitiveZones) || []
             }
             disabled={!isEditing}
             onChange={(nextList) => {
@@ -383,27 +395,10 @@ function HistorialClinicoUser({ data, onSave }) {
           </p>
         </header>
 
-        <ul className="clinical-timeline">
-          {(data?.treatmentsHistory || []).map((t) => {
-            const date = t?.date ? new Date(t.date) : null;
-            const formatted = date
-              ? date.toLocaleDateString("es-MX", {
-                  year: "numeric",
-                  month: "short",
-                  day: "2-digit",
-                })
-              : "";
-            return (
-              <li
-                key={t.id || `${t.name}-${t.date}`}
-                className="clinical-entry"
-              >
-                <p className="clinical-entry__title">{t?.name || "—"}</p>
-                <p className="clinical-entry__meta">{formatted}</p>
-              </li>
-            );
-          })}
-        </ul>
+        <p className="clinical-hint">
+          Este apartado se gestiona por el staff y se habilitará cuando esté
+          disponible en tu expediente.
+        </p>
       </article>
     </section>
   );

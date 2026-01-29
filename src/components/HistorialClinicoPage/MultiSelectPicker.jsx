@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 
-const uniq = (list) => Array.from(new Set((list || []).filter(Boolean)));
+const uniq = (list) =>
+  Array.from(new Set((Array.isArray(list) ? list : []).filter(Boolean)));
 
 function MultiSelectPicker({
   label,
@@ -13,19 +14,30 @@ function MultiSelectPicker({
   const normalizedOptions = useMemo(() => options || [], [options]);
   const normalizedValue = useMemo(() => uniq(value), [value]);
 
+  const availableOptions = useMemo(
+    () => normalizedOptions.filter((opt) => !normalizedValue.includes(opt)),
+    [normalizedOptions, normalizedValue],
+  );
+
   const [pending, setPending] = useState("");
 
   useEffect(() => {
-    const firstAvailable = normalizedOptions.find(
-      (opt) => !normalizedValue.includes(opt),
-    );
-    setPending(firstAvailable || normalizedOptions[0] || "");
-  }, [normalizedOptions, normalizedValue]);
+    // Keep user's current pending selection when possible.
+    // Only auto-pick when pending is empty/invalid or already selected.
+    if (!availableOptions.length) {
+      if (pending !== "") setPending("");
+      return;
+    }
+
+    if (!pending || !availableOptions.includes(pending)) {
+      setPending(availableOptions[0]);
+    }
+  }, [availableOptions, pending]);
 
   const addPending = () => {
     if (!pending) return;
     if (normalizedValue.includes(pending)) return;
-    onChange?.([...normalizedValue, pending]);
+    onChange?.(uniq([...normalizedValue, pending]));
   };
 
   const removeValue = (item) => {
@@ -41,13 +53,19 @@ function MultiSelectPicker({
             className="clinical-form__select"
             value={pending}
             onChange={(e) => setPending(e.target.value)}
-            disabled={disabled}
+            disabled={disabled || availableOptions.length === 0}
           >
-            {normalizedOptions.map((opt) => (
-              <option key={opt} value={opt}>
-                {opt}
+            {availableOptions.length === 0 ? (
+              <option value="" disabled>
+                Todas seleccionadas
               </option>
-            ))}
+            ) : (
+              availableOptions.map((opt) => (
+                <option key={opt} value={opt}>
+                  {opt}
+                </option>
+              ))
+            )}
           </select>
         </label>
 
@@ -55,7 +73,7 @@ function MultiSelectPicker({
           type="button"
           className="clinical-button clinical-button--outline clinical-multi__add"
           onClick={addPending}
-          disabled={disabled || !pending}
+          disabled={disabled || !pending || availableOptions.length === 0}
         >
           Agregar
         </button>
